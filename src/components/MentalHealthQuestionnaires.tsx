@@ -2201,6 +2201,249 @@ const CAS_QUESTIONS: Question[] = [
   },
 ];
 
+// SCAS: Spence Children's Anxiety Scale (abbreviated for ages 6-18)
+const SCAS_QUESTIONS: Question[] = [
+  {
+    id: "scas_1",
+    text: "My child worries about things",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+  {
+    id: "scas_2",
+    text: "My child is scared of the dark",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+  {
+    id: "scas_3",
+    text: "When my child has a problem, my child gets a funny feeling in their stomach",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+  {
+    id: "scas_4",
+    text: "My child feels afraid",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+  {
+    id: "scas_5",
+    text: "My child would feel afraid of being on their own at home",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+  {
+    id: "scas_6",
+    text: "My child feels scared when they have to take a test",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+  {
+    id: "scas_7",
+    text: "My child feels afraid that they will make a fool of themselves in front of people",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+  {
+    id: "scas_8",
+    text: "My child worries about being away from parents",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+  {
+    id: "scas_9",
+    text: "My child is scared of dogs",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+  {
+    id: "scas_10",
+    text: "My child has trouble going to school in the mornings because they feel nervous or afraid",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+      { value: 3, label: "Always" },
+    ],
+  },
+];
+
+// SDQ: Strengths and Difficulties Questionnaire (parent version for ages 3-16)
+const SDQ_QUESTIONS: Question[] = [
+  {
+    id: "sdq_1",
+    text: "Considerate of other people's feelings",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_2",
+    text: "Restless, overactive, cannot stay still for long",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_3",
+    text: "Often complains of headaches, stomach-aches or sickness",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_4",
+    text: "Shares readily with other children (treats, toys, pencils, etc.)",
+    options: [
+      { value: 2, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 0, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_5",
+    text: "Often has temper tantrums or hot tempers",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_6",
+    text: "Rather solitary, tends to play alone",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_7",
+    text: "Generally obedient, usually does what adults request",
+    options: [
+      { value: 2, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 0, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_8",
+    text: "Many worries, often seems worried",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_9",
+    text: "Helpful if someone is hurt, upset or feeling ill",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_10",
+    text: "Constantly fidgeting or squirming",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_11",
+    text: "Has at least one good friend",
+    options: [
+      { value: 2, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 0, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_12",
+    text: "Often fights with other children or bullies them",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_13",
+    text: "Often unhappy, down-hearted or tearful",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_14",
+    text: "Generally liked by other children",
+    options: [
+      { value: 2, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 0, label: "Certainly True" },
+    ],
+  },
+  {
+    id: "sdq_15",
+    text: "Easily distracted, concentration wanders",
+    options: [
+      { value: 0, label: "Not True" },
+      { value: 1, label: "Somewhat True" },
+      { value: 2, label: "Certainly True" },
+    ],
+  },
+];
+
 // PDSS: Panic Disorder Severity Scale (abbreviated)
 const PDSS_QUESTIONS: Question[] = [
   {
@@ -3013,6 +3256,78 @@ const QUESTIONNAIRES: Questionnaire[] = [
       ],
     },
     icon: Activity,
+  },
+  {
+    id: "scas",
+    name: "Spence Children's Anxiety Scale",
+    acronym: "SCAS",
+    description: "Child anxiety screening for ages 6-18 (parent report - 10 items)",
+    type: "child_anxiety",
+    questions: SCAS_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 30,
+      ranges: [
+        {
+          label: "Low",
+          min: 0,
+          max: 10,
+          interpretation: "Low anxiety. Child is within normal range.",
+        },
+        {
+          label: "Moderate",
+          min: 11,
+          max: 18,
+          interpretation: "Moderate anxiety. Monitor child's symptoms and consider support.",
+        },
+        {
+          label: "High",
+          min: 19,
+          max: 24,
+          interpretation: "High anxiety. Clinical evaluation recommended for child.",
+        },
+        {
+          label: "Very High",
+          min: 25,
+          max: 30,
+          interpretation: "Very high anxiety. Immediate clinical intervention recommended for child.",
+        },
+      ],
+    },
+    icon: Baby,
+  },
+  {
+    id: "sdq",
+    name: "Strengths and Difficulties Questionnaire",
+    acronym: "SDQ",
+    description: "Behavioral/emotional screening for ages 3-16 (parent report - 15 items)",
+    type: "child_behavioral",
+    questions: SDQ_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 30,
+      ranges: [
+        {
+          label: "Normal",
+          min: 0,
+          max: 13,
+          interpretation: "Normal behavioral and emotional development. Child is doing well.",
+        },
+        {
+          label: "Borderline",
+          min: 14,
+          max: 16,
+          interpretation: "Borderline difficulties. Monitor child's behavior and provide additional support.",
+        },
+        {
+          label: "Abnormal",
+          min: 17,
+          max: 30,
+          interpretation: "Significant behavioral/emotional difficulties. Clinical assessment recommended for child.",
+        },
+      ],
+    },
+    icon: Baby,
   },
 ];
 
