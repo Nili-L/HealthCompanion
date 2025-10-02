@@ -44,6 +44,7 @@ import {
   Utensils,
   Moon,
   Flame,
+  Settings,
 } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -2438,18 +2439,29 @@ const QUESTIONNAIRES: Questionnaire[] = [
   },
 ];
 
-export function MentalHealthQuestionnaires({ accessToken }: { accessToken: string }) {
+export function MentalHealthQuestionnaires({
+  accessToken,
+  role
+}: {
+  accessToken: string;
+  role?: 'patient' | 'provider';
+}) {
   const [responses, setResponses] = useState<QuestionnaireResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<Questionnaire | null>(null);
   const [currentAnswers, setCurrentAnswers] = useState<Record<string, number>>({});
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [assignedQuestionnaires, setAssignedQuestionnaires] = useState<string[]>([]);
+  const [isManageDialogOpen, setIsManageDialogOpen] = useState(false);
 
   const projectId = "cvsxfzllhhhpdyckdmqg";
 
   useEffect(() => {
     fetchResponses();
+    if (role === 'patient') {
+      fetchAssignedQuestionnaires();
+    }
   }, []);
 
   const fetchResponses = async () => {
@@ -2464,13 +2476,60 @@ export function MentalHealthQuestionnaires({ accessToken }: { accessToken: strin
 
       if (response.ok) {
         const data = await response.json();
-        setResponses(data.responses || []);
+        setResponses(data || []);
       }
     } catch (error) {
       toast.error("Failed to load questionnaires");
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAssignedQuestionnaires = async () => {
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-50d6a062/assigned-questionnaires`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setAssignedQuestionnaires(data.questionnaireIds || []);
+      }
+    } catch (error) {
+      console.error("Failed to load assigned questionnaires:", error);
+    }
+  };
+
+  const toggleQuestionnaireAssignment = async (questionnaireId: string) => {
+    const isAssigned = assignedQuestionnaires.includes(questionnaireId);
+    const newAssignments = isAssigned
+      ? assignedQuestionnaires.filter(id => id !== questionnaireId)
+      : [...assignedQuestionnaires, questionnaireId];
+
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-50d6a062/assigned-questionnaires`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ questionnaireIds: newAssignments }),
+        }
+      );
+
+      if (response.ok) {
+        setAssignedQuestionnaires(newAssignments);
+        toast.success(isAssigned ? 'Questionnaire removed' : 'Questionnaire assigned');
+      }
+    } catch (error) {
+      toast.error('Failed to update questionnaire assignments');
+      console.error(error);
     }
   };
 
@@ -2601,6 +2660,10 @@ export function MentalHealthQuestionnaires({ accessToken }: { accessToken: strin
     );
   }
 
+  const filteredQuestionnaires = role === 'patient'
+    ? QUESTIONNAIRES.filter(q => assignedQuestionnaires.length === 0 || assignedQuestionnaires.includes(q.id))
+    : QUESTIONNAIRES;
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -2609,9 +2672,17 @@ export function MentalHealthQuestionnaires({ accessToken }: { accessToken: strin
             Mental Health Questionnaires
           </h2>
           <p className="text-muted-foreground">
-            Evidence-based screening tools for mental health assessment
+            {role === 'provider'
+              ? 'Manage and assign evidence-based screening tools for your patients'
+              : 'Evidence-based screening tools for mental health assessment'}
           </p>
         </div>
+        {role === 'provider' && (
+          <Button onClick={() => setIsManageDialogOpen(true)}>
+            <Settings className="h-4 w-4 mr-2" />
+            Manage Assignments
+          </Button>
+        )}
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -2659,8 +2730,15 @@ export function MentalHealthQuestionnaires({ accessToken }: { accessToken: strin
         </TabsList>
 
         <TabsContent value="available" className="space-y-4">
+          {role === 'patient' && assignedQuestionnaires.length > 0 && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <p className="text-sm text-blue-900">
+                <strong>Note:</strong> Your provider has assigned {assignedQuestionnaires.length} questionnaire(s) for you to complete.
+              </p>
+            </div>
+          )}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {QUESTIONNAIRES.map((questionnaire) => {
+            {filteredQuestionnaires.map((questionnaire) => {
               const Icon = questionnaire.icon;
               return (
                 <Card key={questionnaire.id} className="hover:shadow-md transition-shadow">
@@ -2852,6 +2930,75 @@ export function MentalHealthQuestionnaires({ accessToken }: { accessToken: strin
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Provider Management Dialog */}
+      <Dialog open={isManageDialogOpen} onOpenChange={setIsManageDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Manage Questionnaire Assignments</DialogTitle>
+            <DialogDescription>
+              Select which questionnaires your patients should complete. Patients will only see assigned questionnaires.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid gap-4">
+              {QUESTIONNAIRES.map((questionnaire) => {
+                const Icon = questionnaire.icon;
+                const isAssigned = assignedQuestionnaires.includes(questionnaire.id);
+                return (
+                  <Card
+                    key={questionnaire.id}
+                    className={`cursor-pointer transition-all ${
+                      isAssigned ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                    }`}
+                    onClick={() => toggleQuestionnaireAssignment(questionnaire.id)}
+                  >
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start gap-3">
+                        <div className={`p-2 rounded-lg ${isAssigned ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                          <Icon className={`h-5 w-5 ${isAssigned ? 'text-blue-600' : 'text-gray-600'}`} />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <CardTitle className="text-base">{questionnaire.acronym}</CardTitle>
+                              <CardDescription className="text-sm mt-1">
+                                {questionnaire.name}
+                              </CardDescription>
+                            </div>
+                            {isAssigned && (
+                              <CheckCircle2 className="h-5 w-5 text-blue-600" />
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-2">
+                            {questionnaire.description}
+                          </p>
+                          <div className="flex items-center gap-2 mt-2">
+                            <Badge variant="outline" className="text-xs">
+                              {questionnaire.questions.length} questions
+                            </Badge>
+                            <Badge variant="outline" className="text-xs">
+                              {questionnaire.type}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+          <DialogFooter>
+            <div className="flex items-center justify-between w-full">
+              <p className="text-sm text-muted-foreground">
+                {assignedQuestionnaires.length} of {QUESTIONNAIRES.length} questionnaires assigned
+              </p>
+              <Button onClick={() => setIsManageDialogOpen(false)}>Done</Button>
+            </div>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

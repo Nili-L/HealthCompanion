@@ -1712,4 +1712,46 @@ app.post("/make-server-50d6a062/questionnaires", async (c) => {
   }
 });
 
+// ===== ASSIGNED QUESTIONNAIRES ENDPOINTS =====
+
+app.get("/make-server-50d6a062/assigned-questionnaires", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const assignments = await kv.get(`assigned-questionnaires:${user.id}`);
+    return c.json({ questionnaireIds: assignments?.questionnaireIds || [] });
+  } catch (error) {
+    console.error('Get assigned questionnaires error:', error);
+    return c.json({ error: 'Failed to fetch assigned questionnaires' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/assigned-questionnaires", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const { questionnaireIds } = await c.req.json();
+
+    await kv.set(`assigned-questionnaires:${user.id}`, {
+      questionnaireIds,
+      updatedAt: new Date().toISOString()
+    });
+
+    return c.json({ success: true, questionnaireIds });
+  } catch (error) {
+    console.error('Update assigned questionnaires error:', error);
+    return c.json({ error: 'Failed to update assigned questionnaires' }, 500);
+  }
+});
+
 Deno.serve(app.fetch);

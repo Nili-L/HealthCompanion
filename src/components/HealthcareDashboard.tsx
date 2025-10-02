@@ -97,7 +97,7 @@ function ModuleDetailView({ moduleTitle, role, accessToken }: ModuleDetailViewPr
   }
 
   if (moduleTitle === "Mental Health Questionnaires") {
-    return <MentalHealthQuestionnaires accessToken={accessToken} />;
+    return <MentalHealthQuestionnaires accessToken={accessToken} role={role} />;
   }
 
   // Default view for modules without custom components yet
