@@ -45,6 +45,9 @@ import {
   Moon,
   Flame,
   Settings,
+  Frown,
+  Angry,
+  Activity,
 } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1878,6 +1881,385 @@ const BSL23_QUESTIONS: Question[] = [
   },
 ];
 
+// PSWQ: Penn State Worry Questionnaire (abbreviated version)
+const PSWQ_QUESTIONS: Question[] = [
+  {
+    id: "pswq_1",
+    text: "If I do not have enough time to do everything, I do not worry about it",
+    options: [
+      { value: 1, label: "Not at all typical" },
+      { value: 2, label: "Slightly typical" },
+      { value: 3, label: "Somewhat typical" },
+      { value: 4, label: "Moderately typical" },
+      { value: 5, label: "Very typical" },
+    ],
+  },
+  {
+    id: "pswq_2",
+    text: "My worries overwhelm me",
+    options: [
+      { value: 1, label: "Not at all typical" },
+      { value: 2, label: "Slightly typical" },
+      { value: 3, label: "Somewhat typical" },
+      { value: 4, label: "Moderately typical" },
+      { value: 5, label: "Very typical" },
+    ],
+  },
+  {
+    id: "pswq_3",
+    text: "I do not tend to worry about things",
+    options: [
+      { value: 5, label: "Not at all typical" },
+      { value: 4, label: "Slightly typical" },
+      { value: 3, label: "Somewhat typical" },
+      { value: 2, label: "Moderately typical" },
+      { value: 1, label: "Very typical" },
+    ],
+  },
+  {
+    id: "pswq_4",
+    text: "Many situations make me worry",
+    options: [
+      { value: 1, label: "Not at all typical" },
+      { value: 2, label: "Slightly typical" },
+      { value: 3, label: "Somewhat typical" },
+      { value: 4, label: "Moderately typical" },
+      { value: 5, label: "Very typical" },
+    ],
+  },
+  {
+    id: "pswq_5",
+    text: "I know I should not worry about things, but I just cannot help it",
+    options: [
+      { value: 1, label: "Not at all typical" },
+      { value: 2, label: "Slightly typical" },
+      { value: 3, label: "Somewhat typical" },
+      { value: 4, label: "Moderately typical" },
+      { value: 5, label: "Very typical" },
+    ],
+  },
+  {
+    id: "pswq_6",
+    text: "When I am under pressure I worry a lot",
+    options: [
+      { value: 1, label: "Not at all typical" },
+      { value: 2, label: "Slightly typical" },
+      { value: 3, label: "Somewhat typical" },
+      { value: 4, label: "Moderately typical" },
+      { value: 5, label: "Very typical" },
+    ],
+  },
+  {
+    id: "pswq_7",
+    text: "I am always worrying about something",
+    options: [
+      { value: 1, label: "Not at all typical" },
+      { value: 2, label: "Slightly typical" },
+      { value: 3, label: "Somewhat typical" },
+      { value: 4, label: "Moderately typical" },
+      { value: 5, label: "Very typical" },
+    ],
+  },
+  {
+    id: "pswq_8",
+    text: "I find it easy to dismiss worrisome thoughts",
+    options: [
+      { value: 5, label: "Not at all typical" },
+      { value: 4, label: "Slightly typical" },
+      { value: 3, label: "Somewhat typical" },
+      { value: 2, label: "Moderately typical" },
+      { value: 1, label: "Very typical" },
+    ],
+  },
+];
+
+// EPDS: Edinburgh Postnatal Depression Scale
+const EPDS_QUESTIONS: Question[] = [
+  {
+    id: "epds_1",
+    text: "I have been able to laugh and see the funny side of things",
+    options: [
+      { value: 0, label: "As much as I always could" },
+      { value: 1, label: "Not quite so much now" },
+      { value: 2, label: "Definitely not so much now" },
+      { value: 3, label: "Not at all" },
+    ],
+  },
+  {
+    id: "epds_2",
+    text: "I have looked forward with enjoyment to things",
+    options: [
+      { value: 0, label: "As much as I ever did" },
+      { value: 1, label: "Rather less than I used to" },
+      { value: 2, label: "Definitely less than I used to" },
+      { value: 3, label: "Hardly at all" },
+    ],
+  },
+  {
+    id: "epds_3",
+    text: "I have blamed myself unnecessarily when things went wrong",
+    options: [
+      { value: 3, label: "Yes, most of the time" },
+      { value: 2, label: "Yes, some of the time" },
+      { value: 1, label: "Not very often" },
+      { value: 0, label: "No, never" },
+    ],
+  },
+  {
+    id: "epds_4",
+    text: "I have been anxious or worried for no good reason",
+    options: [
+      { value: 0, label: "No, not at all" },
+      { value: 1, label: "Hardly ever" },
+      { value: 2, label: "Yes, sometimes" },
+      { value: 3, label: "Yes, very often" },
+    ],
+  },
+  {
+    id: "epds_5",
+    text: "I have felt scared or panicky for no very good reason",
+    options: [
+      { value: 3, label: "Yes, quite a lot" },
+      { value: 2, label: "Yes, sometimes" },
+      { value: 1, label: "No, not much" },
+      { value: 0, label: "No, not at all" },
+    ],
+  },
+  {
+    id: "epds_6",
+    text: "Things have been getting on top of me",
+    options: [
+      { value: 3, label: "Yes, most of the time I haven't been able to cope" },
+      { value: 2, label: "Yes, sometimes I haven't been coping as well as usual" },
+      { value: 1, label: "No, most of the time I have coped quite well" },
+      { value: 0, label: "No, I have been coping as well as ever" },
+    ],
+  },
+  {
+    id: "epds_7",
+    text: "I have been so unhappy that I have had difficulty sleeping",
+    options: [
+      { value: 3, label: "Yes, most of the time" },
+      { value: 2, label: "Yes, sometimes" },
+      { value: 1, label: "Not very often" },
+      { value: 0, label: "No, not at all" },
+    ],
+  },
+  {
+    id: "epds_8",
+    text: "I have felt sad or miserable",
+    options: [
+      { value: 3, label: "Yes, most of the time" },
+      { value: 2, label: "Yes, quite often" },
+      { value: 1, label: "Not very often" },
+      { value: 0, label: "No, not at all" },
+    ],
+  },
+  {
+    id: "epds_9",
+    text: "I have been so unhappy that I have been crying",
+    options: [
+      { value: 3, label: "Yes, most of the time" },
+      { value: 2, label: "Yes, quite often" },
+      { value: 1, label: "Only occasionally" },
+      { value: 0, label: "No, never" },
+    ],
+  },
+  {
+    id: "epds_10",
+    text: "The thought of harming myself has occurred to me",
+    options: [
+      { value: 3, label: "Yes, quite often" },
+      { value: 2, label: "Sometimes" },
+      { value: 1, label: "Hardly ever" },
+      { value: 0, label: "Never" },
+    ],
+  },
+];
+
+// OCI-R: Obsessive Compulsive Inventory - Revised (abbreviated)
+const OCIR_QUESTIONS: Question[] = [
+  {
+    id: "ocir_1",
+    text: "I have saved up so many things that they get in the way",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Moderately" },
+      { value: 3, label: "A lot" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "ocir_2",
+    text: "I check things more often than necessary",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Moderately" },
+      { value: 3, label: "A lot" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "ocir_3",
+    text: "I get upset if objects are not arranged properly",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Moderately" },
+      { value: 3, label: "A lot" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "ocir_4",
+    text: "I feel compelled to count while I am doing things",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Moderately" },
+      { value: 3, label: "A lot" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "ocir_5",
+    text: "I find it difficult to touch an object when I know it has been touched by strangers",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Moderately" },
+      { value: 3, label: "A lot" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "ocir_6",
+    text: "I find it difficult to control my own thoughts",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Moderately" },
+      { value: 3, label: "A lot" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+];
+
+// CAS: Clinical Anger Scale (abbreviated)
+const CAS_QUESTIONS: Question[] = [
+  {
+    id: "cas_1",
+    text: "I feel angry",
+    options: [
+      { value: 0, label: "None or almost none of the time" },
+      { value: 1, label: "A little of the time" },
+      { value: 2, label: "Some of the time" },
+      { value: 3, label: "Most of the time" },
+    ],
+  },
+  {
+    id: "cas_2",
+    text: "I feel like breaking things",
+    options: [
+      { value: 0, label: "None or almost none of the time" },
+      { value: 1, label: "A little of the time" },
+      { value: 2, label: "Some of the time" },
+      { value: 3, label: "Most of the time" },
+    ],
+  },
+  {
+    id: "cas_3",
+    text: "I get so angry I feel like I might lose control",
+    options: [
+      { value: 0, label: "None or almost none of the time" },
+      { value: 1, label: "A little of the time" },
+      { value: 2, label: "Some of the time" },
+      { value: 3, label: "Most of the time" },
+    ],
+  },
+  {
+    id: "cas_4",
+    text: "I get angry when I'm slowed down",
+    options: [
+      { value: 0, label: "None or almost none of the time" },
+      { value: 1, label: "A little of the time" },
+      { value: 2, label: "Some of the time" },
+      { value: 3, label: "Most of the time" },
+    ],
+  },
+  {
+    id: "cas_5",
+    text: "I feel angrier than most people",
+    options: [
+      { value: 0, label: "None or almost none of the time" },
+      { value: 1, label: "A little of the time" },
+      { value: 2, label: "Some of the time" },
+      { value: 3, label: "Most of the time" },
+    ],
+  },
+];
+
+// PDSS: Panic Disorder Severity Scale (abbreviated)
+const PDSS_QUESTIONS: Question[] = [
+  {
+    id: "pdss_1",
+    text: "How many panic and limited symptom attacks did you have during the week?",
+    options: [
+      { value: 0, label: "No panic or limited symptom episodes" },
+      { value: 1, label: "Mild - no full panic attacks and no more than 1 limited symptom attack/day" },
+      { value: 2, label: "Moderate - 1 or 2 full panic attacks and/or multiple limited symptom attacks/day" },
+      { value: 3, label: "Severe - more than 2 full attacks but not more than 1/day on average" },
+      { value: 4, label: "Extreme - full panic attacks occurred more than once a day" },
+    ],
+  },
+  {
+    id: "pdss_2",
+    text: "If you had any panic attacks during the past week, how distressing were they?",
+    options: [
+      { value: 0, label: "Not at all distressing" },
+      { value: 1, label: "Mildly distressing" },
+      { value: 2, label: "Moderately distressing" },
+      { value: 3, label: "Markedly distressing" },
+      { value: 4, label: "Extremely distressing" },
+    ],
+  },
+  {
+    id: "pdss_3",
+    text: "During the past week, how much have you worried or felt anxious about when your next panic attack would occur?",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "Occasionally" },
+      { value: 2, label: "Frequently" },
+      { value: 3, label: "Very frequently" },
+      { value: 4, label: "Nearly constantly" },
+    ],
+  },
+  {
+    id: "pdss_4",
+    text: "During the past week, were there any places or situations you avoided, or felt afraid of, because of panic attacks?",
+    options: [
+      { value: 0, label: "None - no fear or avoidance" },
+      { value: 1, label: "Mild - occasional fear and/or avoidance but I could usually confront" },
+      { value: 2, label: "Moderate - noticeable avoidance but I could manage" },
+      { value: 3, label: "Severe - extensive avoidance and substantial distress" },
+      { value: 4, label: "Extreme - pervasive disabling fear and/or avoidance" },
+    ],
+  },
+  {
+    id: "pdss_5",
+    text: "During the past week, how much did panic attacks interfere with your ability to work or carry out responsibilities at home?",
+    options: [
+      { value: 0, label: "No interference" },
+      { value: 1, label: "Mild interference" },
+      { value: 2, label: "Moderate interference" },
+      { value: 3, label: "Severe interference" },
+      { value: 4, label: "Extreme interference" },
+    ],
+  },
+];
+
 const QUESTIONNAIRES: Questionnaire[] = [
   {
     id: "phq9",
@@ -2436,6 +2818,201 @@ const QUESTIONNAIRES: Questionnaire[] = [
       ],
     },
     icon: Brain,
+  },
+  {
+    id: "pswq",
+    name: "Penn State Worry Questionnaire",
+    acronym: "PSWQ",
+    description: "Worry and generalized anxiety assessment (8 items)",
+    type: "worry_anxiety",
+    questions: PSWQ_QUESTIONS,
+    scoring: {
+      min: 8,
+      max: 40,
+      ranges: [
+        {
+          label: "Low",
+          min: 8,
+          max: 16,
+          interpretation: "Low levels of worry. Within normal range.",
+        },
+        {
+          label: "Moderate",
+          min: 17,
+          max: 24,
+          interpretation: "Moderate worry. May benefit from stress management techniques.",
+        },
+        {
+          label: "High",
+          min: 25,
+          max: 32,
+          interpretation: "High levels of worry. Clinical evaluation recommended.",
+        },
+        {
+          label: "Very High",
+          min: 33,
+          max: 40,
+          interpretation: "Very high worry levels. Generalized anxiety disorder likely. Treatment recommended.",
+        },
+      ],
+    },
+    icon: Zap,
+  },
+  {
+    id: "epds",
+    name: "Edinburgh Postnatal Depression Scale",
+    acronym: "EPDS",
+    description: "Postnatal/perinatal depression screening (10 items)",
+    type: "postnatal_depression",
+    questions: EPDS_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 30,
+      ranges: [
+        {
+          label: "Low Risk",
+          min: 0,
+          max: 9,
+          interpretation: "Low risk for postnatal depression.",
+        },
+        {
+          label: "Moderate Risk",
+          min: 10,
+          max: 12,
+          interpretation: "Moderate risk. Further assessment and support recommended.",
+        },
+        {
+          label: "High Risk",
+          min: 13,
+          max: 30,
+          interpretation: "High risk for postnatal depression. Clinical evaluation and intervention recommended.",
+        },
+      ],
+    },
+    icon: Baby,
+  },
+  {
+    id: "ocir",
+    name: "Obsessive Compulsive Inventory - Revised",
+    acronym: "OCI-R",
+    description: "OCD symptom assessment (6 items abbreviated)",
+    type: "ocd",
+    questions: OCIR_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 24,
+      ranges: [
+        {
+          label: "Minimal",
+          min: 0,
+          max: 6,
+          interpretation: "Minimal OCD symptoms.",
+        },
+        {
+          label: "Mild",
+          min: 7,
+          max: 12,
+          interpretation: "Mild OCD symptoms. Monitor and consider assessment.",
+        },
+        {
+          label: "Moderate",
+          min: 13,
+          max: 18,
+          interpretation: "Moderate OCD symptoms. Clinical evaluation recommended.",
+        },
+        {
+          label: "Severe",
+          min: 19,
+          max: 24,
+          interpretation: "Severe OCD symptoms. Treatment strongly recommended.",
+        },
+      ],
+    },
+    icon: Brain,
+  },
+  {
+    id: "cas",
+    name: "Clinical Anger Scale",
+    acronym: "CAS",
+    description: "Clinical anger assessment (5 items)",
+    type: "anger",
+    questions: CAS_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 15,
+      ranges: [
+        {
+          label: "Low",
+          min: 0,
+          max: 3,
+          interpretation: "Low anger levels. Within normal range.",
+        },
+        {
+          label: "Moderate",
+          min: 4,
+          max: 7,
+          interpretation: "Moderate anger. May benefit from anger management techniques.",
+        },
+        {
+          label: "High",
+          min: 8,
+          max: 11,
+          interpretation: "High anger levels. Clinical intervention may be helpful.",
+        },
+        {
+          label: "Severe",
+          min: 12,
+          max: 15,
+          interpretation: "Severe anger problems. Clinical intervention strongly recommended.",
+        },
+      ],
+    },
+    icon: Angry,
+  },
+  {
+    id: "pdss",
+    name: "Panic Disorder Severity Scale",
+    acronym: "PDSS",
+    description: "Panic disorder symptom severity (5 items)",
+    type: "panic_disorder",
+    questions: PDSS_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 20,
+      ranges: [
+        {
+          label: "None/Minimal",
+          min: 0,
+          max: 3,
+          interpretation: "None or minimal panic disorder symptoms.",
+        },
+        {
+          label: "Mild",
+          min: 4,
+          max: 7,
+          interpretation: "Mild panic disorder. Monitor symptoms.",
+        },
+        {
+          label: "Moderate",
+          min: 8,
+          max: 11,
+          interpretation: "Moderate panic disorder. Clinical evaluation recommended.",
+        },
+        {
+          label: "Severe",
+          min: 12,
+          max: 15,
+          interpretation: "Severe panic disorder. Active treatment recommended.",
+        },
+        {
+          label: "Extreme",
+          min: 16,
+          max: 20,
+          interpretation: "Extreme panic disorder severity. Immediate clinical intervention required.",
+        },
+      ],
+    },
+    icon: Activity,
   },
 ];
 
