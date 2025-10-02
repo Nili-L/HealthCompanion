@@ -41,6 +41,9 @@ import {
   Users,
   Baby,
   CircleSlash,
+  Utensils,
+  Moon,
+  Flame,
 } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1347,6 +1350,533 @@ const PSC17_QUESTIONS: Question[] = [
   },
 ];
 
+// MDQ: Mood Disorder Questionnaire (Bipolar Screening)
+const MDQ_QUESTIONS: Question[] = [
+  {
+    id: "mdq_1",
+    text: "Has there ever been a period of time when you were not your usual self and you felt so good or so hyper that other people thought you were not your normal self or you were so hyper that you got into trouble?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_2",
+    text: "You were so irritable that you shouted at people or started fights or arguments?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_3",
+    text: "You felt much more self-confident than usual?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_4",
+    text: "You got much less sleep than usual and found you didn't really miss it?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_5",
+    text: "You were much more talkative or spoke much faster than usual?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_6",
+    text: "Thoughts raced through your head or you couldn't slow your mind down?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_7",
+    text: "You were so easily distracted by things around you that you had trouble concentrating or staying on track?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_8",
+    text: "You had much more energy than usual?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_9",
+    text: "You were much more active or did many more things than usual?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_10",
+    text: "You were much more social or outgoing than usual, for example, you telephoned friends in the middle of the night?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_11",
+    text: "You were much more interested in sex than usual?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_12",
+    text: "You did things that were unusual for you or that other people might have thought were excessive, foolish, or risky?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "mdq_13",
+    text: "Spending money got you or your family into trouble?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+];
+
+// EAT-26: Eating Attitudes Test
+const EAT26_QUESTIONS: Question[] = [
+  {
+    id: "eat26_1",
+    text: "Am terrified about being overweight",
+    options: [
+      { value: 3, label: "Always" },
+      { value: 2, label: "Usually" },
+      { value: 1, label: "Often" },
+      { value: 0, label: "Sometimes" },
+      { value: 0, label: "Rarely" },
+      { value: 0, label: "Never" },
+    ],
+  },
+  {
+    id: "eat26_2",
+    text: "Avoid eating when I am hungry",
+    options: [
+      { value: 3, label: "Always" },
+      { value: 2, label: "Usually" },
+      { value: 1, label: "Often" },
+      { value: 0, label: "Sometimes" },
+      { value: 0, label: "Rarely" },
+      { value: 0, label: "Never" },
+    ],
+  },
+  {
+    id: "eat26_3",
+    text: "Find myself preoccupied with food",
+    options: [
+      { value: 3, label: "Always" },
+      { value: 2, label: "Usually" },
+      { value: 1, label: "Often" },
+      { value: 0, label: "Sometimes" },
+      { value: 0, label: "Rarely" },
+      { value: 0, label: "Never" },
+    ],
+  },
+  {
+    id: "eat26_4",
+    text: "Have gone on eating binges where I feel that I may not be able to stop",
+    options: [
+      { value: 3, label: "Always" },
+      { value: 2, label: "Usually" },
+      { value: 1, label: "Often" },
+      { value: 0, label: "Sometimes" },
+      { value: 0, label: "Rarely" },
+      { value: 0, label: "Never" },
+    ],
+  },
+  {
+    id: "eat26_5",
+    text: "Cut my food into small pieces",
+    options: [
+      { value: 3, label: "Always" },
+      { value: 2, label: "Usually" },
+      { value: 1, label: "Often" },
+      { value: 0, label: "Sometimes" },
+      { value: 0, label: "Rarely" },
+      { value: 0, label: "Never" },
+    ],
+  },
+  {
+    id: "eat26_6",
+    text: "Aware of the calorie content of foods that I eat",
+    options: [
+      { value: 3, label: "Always" },
+      { value: 2, label: "Usually" },
+      { value: 1, label: "Often" },
+      { value: 0, label: "Sometimes" },
+      { value: 0, label: "Rarely" },
+      { value: 0, label: "Never" },
+    ],
+  },
+  {
+    id: "eat26_7",
+    text: "Particularly avoid food with a high carbohydrate content",
+    options: [
+      { value: 3, label: "Always" },
+      { value: 2, label: "Usually" },
+      { value: 1, label: "Often" },
+      { value: 0, label: "Sometimes" },
+      { value: 0, label: "Rarely" },
+      { value: 0, label: "Never" },
+    ],
+  },
+];
+
+// SPIN: Social Phobia Inventory
+const SPIN_QUESTIONS: Question[] = [
+  {
+    id: "spin_1",
+    text: "I am afraid of people in authority",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_2",
+    text: "I am bothered by blushing in front of people",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_3",
+    text: "Parties and social events scare me",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_4",
+    text: "I avoid talking to people I don't know",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_5",
+    text: "Being criticized scares me a lot",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_6",
+    text: "I avoid doing things or speaking to people for fear of embarrassment",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_7",
+    text: "Sweating in front of people causes me distress",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_8",
+    text: "I avoid going to parties",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_9",
+    text: "I avoid activities in which I am the center of attention",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_10",
+    text: "Talking to strangers scares me",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_11",
+    text: "I avoid having to give speeches",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_12",
+    text: "I would do anything to avoid being criticized",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_13",
+    text: "Heart palpitations bother me when I am around people",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_14",
+    text: "I am afraid of doing things when people might be watching",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_15",
+    text: "Being embarrassed or looking stupid are among my worst fears",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_16",
+    text: "I avoid speaking to anyone in authority",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+  {
+    id: "spin_17",
+    text: "Trembling or shaking in front of others is distressing to me",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little bit" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Very much" },
+      { value: 4, label: "Extremely" },
+    ],
+  },
+];
+
+// ISI: Insomnia Severity Index
+const ISI_QUESTIONS: Question[] = [
+  {
+    id: "isi_1",
+    text: "Difficulty falling asleep",
+    options: [
+      { value: 0, label: "None" },
+      { value: 1, label: "Mild" },
+      { value: 2, label: "Moderate" },
+      { value: 3, label: "Severe" },
+      { value: 4, label: "Very Severe" },
+    ],
+  },
+  {
+    id: "isi_2",
+    text: "Difficulty staying asleep",
+    options: [
+      { value: 0, label: "None" },
+      { value: 1, label: "Mild" },
+      { value: 2, label: "Moderate" },
+      { value: 3, label: "Severe" },
+      { value: 4, label: "Very Severe" },
+    ],
+  },
+  {
+    id: "isi_3",
+    text: "Problem waking up too early",
+    options: [
+      { value: 0, label: "None" },
+      { value: 1, label: "Mild" },
+      { value: 2, label: "Moderate" },
+      { value: 3, label: "Severe" },
+      { value: 4, label: "Very Severe" },
+    ],
+  },
+  {
+    id: "isi_4",
+    text: "How satisfied/dissatisfied are you with your current sleep pattern?",
+    options: [
+      { value: 0, label: "Very Satisfied" },
+      { value: 1, label: "Satisfied" },
+      { value: 2, label: "Moderately Satisfied" },
+      { value: 3, label: "Dissatisfied" },
+      { value: 4, label: "Very Dissatisfied" },
+    ],
+  },
+  {
+    id: "isi_5",
+    text: "How noticeable to others do you think your sleeping problem is in terms of impairing the quality of your life?",
+    options: [
+      { value: 0, label: "Not at all noticeable" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Much" },
+      { value: 4, label: "Very much noticeable" },
+    ],
+  },
+  {
+    id: "isi_6",
+    text: "How worried/distressed are you about your current sleep problem?",
+    options: [
+      { value: 0, label: "Not at all worried" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Much" },
+      { value: 4, label: "Very much worried" },
+    ],
+  },
+  {
+    id: "isi_7",
+    text: "To what extent do you consider your sleep problem to interfere with your daily functioning?",
+    options: [
+      { value: 0, label: "Not at all interfering" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Somewhat" },
+      { value: 3, label: "Much" },
+      { value: 4, label: "Very much interfering" },
+    ],
+  },
+];
+
+// BSL-23: Borderline Symptom List
+const BSL23_QUESTIONS: Question[] = [
+  {
+    id: "bsl23_1",
+    text: "I didn't believe in my right to live",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Rather" },
+      { value: 3, label: "Much" },
+      { value: 4, label: "Very much" },
+    ],
+  },
+  {
+    id: "bsl23_2",
+    text: "I felt helpless",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Rather" },
+      { value: 3, label: "Much" },
+      { value: 4, label: "Very much" },
+    ],
+  },
+  {
+    id: "bsl23_3",
+    text: "I felt disgust",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Rather" },
+      { value: 3, label: "Much" },
+      { value: 4, label: "Very much" },
+    ],
+  },
+  {
+    id: "bsl23_4",
+    text: "My mood rapidly cycled in terms of anxiety, anger and depression",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Rather" },
+      { value: 3, label: "Much" },
+      { value: 4, label: "Very much" },
+    ],
+  },
+  {
+    id: "bsl23_5",
+    text: "I suffered from voices and noises from inside or outside my head",
+    options: [
+      { value: 0, label: "Not at all" },
+      { value: 1, label: "A little" },
+      { value: 2, label: "Rather" },
+      { value: 3, label: "Much" },
+      { value: 4, label: "Very much" },
+    ],
+  },
+];
+
 const QUESTIONNAIRES: Questionnaire[] = [
   {
     id: "phq9",
@@ -1734,6 +2264,177 @@ const QUESTIONNAIRES: Questionnaire[] = [
       ],
     },
     icon: Baby,
+  },
+  {
+    id: "mdq",
+    name: "Mood Disorder Questionnaire",
+    acronym: "MDQ",
+    description: "Bipolar disorder screening (13 items)",
+    type: "bipolar",
+    questions: MDQ_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 13,
+      ranges: [
+        {
+          label: "Low Risk",
+          min: 0,
+          max: 6,
+          interpretation: "Low risk for bipolar disorder.",
+        },
+        {
+          label: "Positive Screen",
+          min: 7,
+          max: 13,
+          interpretation: "Positive screen for bipolar disorder. Clinical evaluation strongly recommended.",
+        },
+      ],
+    },
+    icon: Flame,
+  },
+  {
+    id: "eat26",
+    name: "Eating Attitudes Test-26",
+    acronym: "EAT-26",
+    description: "Eating disorder screening (abbreviated 7-item version)",
+    type: "eating_disorder",
+    questions: EAT26_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 21,
+      ranges: [
+        {
+          label: "Low Risk",
+          min: 0,
+          max: 19,
+          interpretation: "Low risk for eating disorder.",
+        },
+        {
+          label: "At Risk",
+          min: 20,
+          max: 21,
+          interpretation: "At risk for eating disorder. Further clinical evaluation recommended.",
+        },
+      ],
+    },
+    icon: Utensils,
+  },
+  {
+    id: "spin",
+    name: "Social Phobia Inventory",
+    acronym: "SPIN",
+    description: "Social anxiety disorder assessment (17 items)",
+    type: "social_anxiety",
+    questions: SPIN_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 68,
+      ranges: [
+        {
+          label: "Minimal",
+          min: 0,
+          max: 20,
+          interpretation: "Minimal social anxiety. No intervention needed.",
+        },
+        {
+          label: "Mild",
+          min: 21,
+          max: 30,
+          interpretation: "Mild social anxiety. Monitor symptoms.",
+        },
+        {
+          label: "Moderate",
+          min: 31,
+          max: 40,
+          interpretation: "Moderate social anxiety. Consider treatment options.",
+        },
+        {
+          label: "Severe",
+          min: 41,
+          max: 50,
+          interpretation: "Severe social anxiety. Clinical intervention recommended.",
+        },
+        {
+          label: "Very Severe",
+          min: 51,
+          max: 68,
+          interpretation: "Very severe social anxiety. Immediate clinical intervention strongly recommended.",
+        },
+      ],
+    },
+    icon: Users,
+  },
+  {
+    id: "isi",
+    name: "Insomnia Severity Index",
+    acronym: "ISI",
+    description: "Sleep disorder/insomnia assessment (7 items)",
+    type: "sleep",
+    questions: ISI_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 28,
+      ranges: [
+        {
+          label: "No Insomnia",
+          min: 0,
+          max: 7,
+          interpretation: "No clinically significant insomnia.",
+        },
+        {
+          label: "Subthreshold",
+          min: 8,
+          max: 14,
+          interpretation: "Subthreshold insomnia. Sleep hygiene education recommended.",
+        },
+        {
+          label: "Moderate",
+          min: 15,
+          max: 21,
+          interpretation: "Moderate clinical insomnia. Treatment recommended.",
+        },
+        {
+          label: "Severe",
+          min: 22,
+          max: 28,
+          interpretation: "Severe clinical insomnia. Immediate treatment strongly recommended.",
+        },
+      ],
+    },
+    icon: Moon,
+  },
+  {
+    id: "bsl23",
+    name: "Borderline Symptom List-23",
+    acronym: "BSL-23",
+    description: "Borderline personality disorder symptoms (abbreviated 5-item version)",
+    type: "personality",
+    questions: BSL23_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 20,
+      ranges: [
+        {
+          label: "Low",
+          min: 0,
+          max: 5,
+          interpretation: "Low borderline symptom severity.",
+        },
+        {
+          label: "Moderate",
+          min: 6,
+          max: 10,
+          interpretation: "Moderate borderline symptoms. Clinical evaluation recommended.",
+        },
+        {
+          label: "High",
+          min: 11,
+          max: 20,
+          interpretation: "High borderline symptom severity. Specialized treatment recommended.",
+        },
+      ],
+    },
+    icon: Brain,
   },
 ];
 
