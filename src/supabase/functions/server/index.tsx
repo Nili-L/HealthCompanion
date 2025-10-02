@@ -1167,12 +1167,140 @@ app.delete("/make-server-50d6a062/documents/:id", async (c) => {
     if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
 
     const documentId = c.req.param('id');
+
+    // Get document to find storage path
+    const document = await kv.get(`document:${user.id}:${documentId}`);
+
+    // Delete from storage if file exists
+    if (document && document.storagePath) {
+      try {
+        await supabase.storage.from('medical-documents').remove([document.storagePath]);
+      } catch (storageError) {
+        console.error('Error deleting file from storage:', storageError);
+      }
+    }
+
+    // Delete from KV
     await kv.del(`document:${user.id}:${documentId}`);
 
     return c.json({ success: true });
   } catch (error) {
     console.error('Delete document error:', error);
     return c.json({ error: 'Failed to delete document' }, 500);
+  }
+});
+
+// Upload file endpoint
+app.post("/make-server-50d6a062/documents/upload", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const formData = await c.req.formData();
+    const file = formData.get('file') as File;
+
+    if (!file) {
+      return c.json({ error: 'No file provided' }, 400);
+    }
+
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      return c.json({ error: 'File size exceeds 10MB limit' }, 400);
+    }
+
+    // Validate file type
+    const allowedTypes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/gif',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      return c.json({ error: 'Invalid file type. Allowed: PDF, images, Word, text files' }, 400);
+    }
+
+    // Generate unique file path
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
+
+    // Upload to Supabase Storage
+    const arrayBuffer = await file.arrayBuffer();
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('medical-documents')
+      .upload(fileName, arrayBuffer, {
+        contentType: file.type,
+        upsert: false
+      });
+
+    if (uploadError) {
+      console.error('Storage upload error:', uploadError);
+      return c.json({ error: 'Failed to upload file' }, 500);
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('medical-documents')
+      .getPublicUrl(fileName);
+
+    return c.json({
+      success: true,
+      storagePath: fileName,
+      publicUrl: publicUrl,
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    return c.json({ error: 'Failed to upload file' }, 500);
+  }
+});
+
+// Download file endpoint
+app.get("/make-server-50d6a062/documents/:id/download", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const documentId = c.req.param('id');
+    const document = await kv.get(`document:${user.id}:${documentId}`);
+
+    if (!document || !document.storagePath) {
+      return c.json({ error: 'Document not found or no file attached' }, 404);
+    }
+
+    // Get signed URL for download
+    const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+      .from('medical-documents')
+      .createSignedUrl(document.storagePath, 60); // Valid for 60 seconds
+
+    if (signedUrlError) {
+      console.error('Error creating signed URL:', signedUrlError);
+      return c.json({ error: 'Failed to generate download link' }, 500);
+    }
+
+    return c.json({
+      success: true,
+      downloadUrl: signedUrlData.signedUrl,
+      fileName: document.fileName
+    });
+  } catch (error) {
+    console.error('Download error:', error);
+    return c.json({ error: 'Failed to download file' }, 500);
   }
 });
 

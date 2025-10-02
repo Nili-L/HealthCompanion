@@ -66,6 +66,12 @@ interface MedicalDocument {
   tags: string[];
   createdAt: string;
   updatedAt: string;
+  // File storage fields
+  storagePath?: string;
+  fileName?: string;
+  fileSize?: number;
+  fileType?: string;
+  publicUrl?: string;
 }
 
 const DOCUMENT_CATEGORIES = [
@@ -100,6 +106,16 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
     tags: [] as string[],
   });
 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedFileData, setUploadedFileData] = useState<{
+    storagePath: string;
+    fileName: string;
+    fileSize: number;
+    fileType: string;
+    publicUrl: string;
+  } | null>(null);
+
   useEffect(() => {
     fetchDocuments();
   }, []);
@@ -130,6 +146,44 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
     }
   };
 
+  const handleFileUpload = async () => {
+    if (!selectedFile) return null;
+
+    setIsUploading(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', selectedFile);
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-50d6a062/documents/upload`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: uploadFormData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setUploadedFileData(data);
+        toast.success('File uploaded successfully');
+        return data;
+      } else {
+        const error = await response.json();
+        toast.error(error.error || 'Failed to upload file');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      toast.error('Error uploading file');
+      return null;
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleSave = async () => {
     if (!formData.title || !formData.category || !formData.date) {
       toast.error("Please fill in required fields");
@@ -137,6 +191,24 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
     }
 
     try {
+      // Upload file first if there's a new file selected
+      let fileData = uploadedFileData;
+      if (selectedFile && !editingDocument) {
+        fileData = await handleFileUpload();
+        if (!fileData) return; // Upload failed
+      }
+
+      const documentData = {
+        ...formData,
+        ...(fileData && {
+          storagePath: fileData.storagePath,
+          fileName: fileData.fileName,
+          fileSize: fileData.fileSize,
+          fileType: fileData.fileType,
+          publicUrl: fileData.publicUrl,
+        }),
+      };
+
       const url = editingDocument
         ? `https://${projectId}.supabase.co/functions/v1/make-server-50d6a062/documents/${editingDocument.id}`
         : `https://${projectId}.supabase.co/functions/v1/make-server-50d6a062/documents`;
@@ -147,7 +219,7 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(documentData),
       });
 
       if (response.ok) {
@@ -190,6 +262,48 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
     }
   };
 
+  const handleDownload = async (doc: MedicalDocument) => {
+    if (!doc.storagePath) {
+      toast.error('No file attached to this document');
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-50d6a062/documents/${doc.id}/download`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        // Open download URL in new window
+        window.open(data.downloadUrl, '_blank');
+        toast.success('Download started');
+      } else {
+        toast.error('Failed to download file');
+      }
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      toast.error('Error downloading file');
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file size (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error('File size must be less than 10MB');
+        return;
+      }
+      setSelectedFile(file);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -200,6 +314,8 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
       fileReference: "",
       tags: [],
     });
+    setSelectedFile(null);
+    setUploadedFileData(null);
   };
 
   const openEditDialog = (doc: MedicalDocument) => {
@@ -410,6 +526,16 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
+                      {doc.storagePath && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleDownload(doc)}
+                          title="Download"
+                        >
+                          <Download className="h-4 w-4 text-green-600" />
+                        </Button>
+                      )}
                       <Button
                         size="sm"
                         variant="ghost"
@@ -526,7 +652,41 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="fileReference">File Reference</Label>
+              <Label htmlFor="fileUpload">
+                <div className="flex items-center gap-2">
+                  <Upload className="h-4 w-4" />
+                  <span>Upload File</span>
+                </div>
+              </Label>
+              <Input
+                id="fileUpload"
+                type="file"
+                onChange={handleFileChange}
+                accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif"
+                disabled={!!editingDocument || isUploading}
+              />
+              {selectedFile && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <FileText className="h-4 w-4" />
+                  <span>{selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedFile(null)}
+                    className="h-6 w-6 p-0"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Supported formats: PDF, Word, images, text files (max 10MB)
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="fileReference">File Reference (Optional)</Label>
               <Input
                 id="fileReference"
                 value={formData.fileReference}
@@ -535,9 +695,6 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
                 }
                 placeholder="File name or reference number"
               />
-              <p className="text-xs text-muted-foreground">
-                Note: Enter file name or reference. Actual file upload not implemented.
-              </p>
             </div>
 
             <div className="space-y-2">
@@ -556,11 +713,11 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setDialogOpen(false)} disabled={isUploading}>
               Cancel
             </Button>
-            <Button onClick={handleSave}>
-              {editingDocument ? "Update" : "Add"} Document
+            <Button onClick={handleSave} disabled={isUploading}>
+              {isUploading ? "Uploading..." : editingDocument ? "Update" : "Add"} Document
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -587,6 +744,27 @@ export function MedicalDocuments({ accessToken }: MedicalDocumentsProps) {
                 <div>
                   <Label className="text-xs text-muted-foreground">Description</Label>
                   <p>{viewingDocument.description}</p>
+                </div>
+              )}
+              {viewingDocument.fileName && (
+                <div>
+                  <Label className="text-xs text-muted-foreground">Attached File</Label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <FileText className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">{viewingDocument.fileName}</span>
+                    <span className="text-xs text-muted-foreground">
+                      ({(viewingDocument.fileSize! / 1024).toFixed(1)} KB)
+                    </span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDownload(viewingDocument)}
+                      className="ml-auto"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Download
+                    </Button>
+                  </div>
                 </div>
               )}
               {viewingDocument.fileReference && (

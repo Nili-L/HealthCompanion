@@ -32,6 +32,8 @@ import {
   Plus,
   Trash2,
   TrendingUp,
+  TrendingDown,
+  Minus,
   AlertCircle,
   Smile,
   Meh,
@@ -356,6 +358,128 @@ export function SymptomTracking({ accessToken }: { accessToken: string }) {
 
   const projectId = "cvsxfzllhhhpdyckdmqg";
 
+  // Trend Badge Component
+  const TrendBadge = ({
+    direction,
+    percentChange,
+    inverse = false
+  }: {
+    direction: 'up' | 'down' | 'stable';
+    percentChange: number;
+    inverse?: boolean;
+  }) => {
+    // For metrics where lower is better (stress, anxiety, pain), inverse the color logic
+    const isGood = inverse
+      ? direction === 'down' || direction === 'stable'
+      : direction === 'up' || direction === 'stable';
+
+    const Icon = direction === 'up' ? TrendingUp : direction === 'down' ? TrendingDown : Minus;
+    const color = direction === 'stable'
+      ? 'text-gray-500'
+      : isGood
+        ? 'text-green-600'
+        : 'text-red-600';
+
+    if (direction === 'stable') {
+      return (
+        <div className="flex items-center gap-1 text-xs text-gray-500">
+          <Minus className="h-3 w-3" />
+          <span>Stable</span>
+        </div>
+      );
+    }
+
+    return (
+      <div className={`flex items-center gap-1 text-xs font-medium ${color}`}>
+        <Icon className="h-3 w-3" />
+        <span>{Math.abs(percentChange).toFixed(0)}%</span>
+      </div>
+    );
+  };
+
+  // Trend calculation helpers
+  const calculateTrend = (
+    metric: keyof SymptomEntry,
+    symptoms: SymptomEntry[],
+    periodDays: number = 7
+  ): { value: number; change: number; direction: 'up' | 'down' | 'stable'; percentChange: number } => {
+    const now = new Date();
+    const periodStart = new Date();
+    periodStart.setDate(periodStart.getDate() - periodDays);
+    const previousPeriodStart = new Date();
+    previousPeriodStart.setDate(previousPeriodStart.getDate() - (periodDays * 2));
+
+    const currentPeriod = symptoms.filter(s => {
+      const date = new Date(s.date);
+      return date >= periodStart && date <= now;
+    });
+
+    const previousPeriod = symptoms.filter(s => {
+      const date = new Date(s.date);
+      return date >= previousPeriodStart && date < periodStart;
+    });
+
+    const currentAvg = currentPeriod.length > 0
+      ? currentPeriod.reduce((sum, s) => sum + (Number(s[metric]) || 0), 0) / currentPeriod.length
+      : 0;
+
+    const previousAvg = previousPeriod.length > 0
+      ? previousPeriod.reduce((sum, s) => sum + (Number(s[metric]) || 0), 0) / previousPeriod.length
+      : 0;
+
+    const change = currentAvg - previousAvg;
+    const percentChange = previousAvg > 0 ? (change / previousAvg) * 100 : 0;
+
+    let direction: 'up' | 'down' | 'stable' = 'stable';
+    if (Math.abs(percentChange) < 5) {
+      direction = 'stable';
+    } else if (change > 0) {
+      direction = 'up';
+    } else {
+      direction = 'down';
+    }
+
+    return { value: currentAvg, change, direction, percentChange };
+  };
+
+  const getSymptomFrequencyTrend = (periodDays: number = 7): {
+    current: number;
+    previous: number;
+    change: number;
+    percentChange: number;
+    direction: 'up' | 'down' | 'stable';
+  } => {
+    const now = new Date();
+    const periodStart = new Date();
+    periodStart.setDate(periodStart.getDate() - periodDays);
+    const previousPeriodStart = new Date();
+    previousPeriodStart.setDate(previousPeriodStart.getDate() - (periodDays * 2));
+
+    const currentCount = symptoms.filter(s => {
+      const date = new Date(s.date);
+      return date >= periodStart && date <= now;
+    }).length;
+
+    const previousCount = symptoms.filter(s => {
+      const date = new Date(s.date);
+      return date >= previousPeriodStart && date < periodStart;
+    }).length;
+
+    const change = currentCount - previousCount;
+    const percentChange = previousCount > 0 ? (change / previousCount) * 100 : 0;
+
+    let direction: 'up' | 'down' | 'stable' = 'stable';
+    if (Math.abs(percentChange) < 10) {
+      direction = 'stable';
+    } else if (change > 0) {
+      direction = 'up';
+    } else {
+      direction = 'down';
+    }
+
+    return { current: currentCount, previous: previousCount, change, percentChange, direction };
+  };
+
   useEffect(() => {
     fetchSymptoms();
   }, []);
@@ -533,25 +657,53 @@ export function SymptomTracking({ accessToken }: { accessToken: string }) {
             <CardTitle className="text-sm font-medium">Total Entries</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{symptoms.length}</div>
-            <p className="text-xs text-muted-foreground">Logs recorded</p>
+            <div className="flex items-baseline justify-between">
+              <div className="text-2xl font-bold">{symptoms.length}</div>
+              {(() => {
+                const trend = getSymptomFrequencyTrend(7);
+                return trend.current > 0 && <TrendBadge direction={trend.direction} percentChange={trend.percentChange} inverse={false} />;
+              })()}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {(() => {
+                const trend = getSymptomFrequencyTrend(7);
+                return trend.previous > 0
+                  ? `${trend.change > 0 ? '+' : ''}${trend.change} from last week`
+                  : 'Last 7 days';
+              })()}
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">This Week</CardTitle>
+            <CardTitle className="text-sm font-medium">Avg Anxiety</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {
-                symptoms.filter((s) => {
-                  const weekAgo = new Date();
-                  weekAgo.setDate(weekAgo.getDate() - 7);
-                  return new Date(s.date) >= weekAgo;
-                }).length
-              }
+            <div className="flex items-baseline justify-between">
+              <div className="text-2xl font-bold">
+                {(() => {
+                  const trend = calculateTrend('anxietyLevel', symptoms, 7);
+                  return trend.value > 0 ? trend.value.toFixed(1) : '0';
+                })()}
+                /10
+              </div>
+              {(() => {
+                const trend = calculateTrend('anxietyLevel', symptoms, 7);
+                return trend.value > 0 && <TrendBadge direction={trend.direction} percentChange={trend.percentChange} inverse={true} />;
+              })()}
             </div>
-            <p className="text-xs text-muted-foreground">Last 7 days</p>
+            <p className="text-xs text-muted-foreground">
+              {(() => {
+                const trend = calculateTrend('anxietyLevel', symptoms, 7);
+                if (trend.value === 0) return 'No data this week';
+                const isImproving = trend.direction === 'down' || trend.direction === 'stable';
+                return isImproving
+                  ? trend.direction === 'stable'
+                    ? 'Holding steady'
+                    : 'Improving ✓'
+                  : 'Needs attention';
+              })()}
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -559,16 +711,31 @@ export function SymptomTracking({ accessToken }: { accessToken: string }) {
             <CardTitle className="text-sm font-medium">Avg Stress</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {symptoms.length > 0
-                ? (
-                    symptoms.reduce((sum, s) => sum + (s.stressLevel || 0), 0) /
-                    symptoms.length
-                  ).toFixed(1)
-                : "0"}
-              /10
+            <div className="flex items-baseline justify-between">
+              <div className="text-2xl font-bold">
+                {(() => {
+                  const trend = calculateTrend('stressLevel', symptoms, 7);
+                  return trend.value > 0 ? trend.value.toFixed(1) : '0';
+                })()}
+                /10
+              </div>
+              {(() => {
+                const trend = calculateTrend('stressLevel', symptoms, 7);
+                return trend.value > 0 && <TrendBadge direction={trend.direction} percentChange={trend.percentChange} inverse={true} />;
+              })()}
             </div>
-            <p className="text-xs text-muted-foreground">Average level</p>
+            <p className="text-xs text-muted-foreground">
+              {(() => {
+                const trend = calculateTrend('stressLevel', symptoms, 7);
+                if (trend.value === 0) return 'No data this week';
+                const isImproving = trend.direction === 'down' || trend.direction === 'stable';
+                return isImproving
+                  ? trend.direction === 'stable'
+                    ? 'Holding steady'
+                    : 'Decreasing ✓'
+                  : 'Increasing';
+              })()}
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -576,19 +743,195 @@ export function SymptomTracking({ accessToken }: { accessToken: string }) {
             <CardTitle className="text-sm font-medium">Avg Sleep</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {symptoms.length > 0
-                ? (
-                    symptoms.reduce((sum, s) => sum + (s.sleepQuality || 0), 0) /
-                    symptoms.length
-                  ).toFixed(1)
-                : "0"}
-              /10
+            <div className="flex items-baseline justify-between">
+              <div className="text-2xl font-bold">
+                {(() => {
+                  const trend = calculateTrend('sleepQuality', symptoms, 7);
+                  return trend.value > 0 ? trend.value.toFixed(1) : '0';
+                })()}
+                /10
+              </div>
+              {(() => {
+                const trend = calculateTrend('sleepQuality', symptoms, 7);
+                return trend.value > 0 && <TrendBadge direction={trend.direction} percentChange={trend.percentChange} inverse={false} />;
+              })()}
             </div>
-            <p className="text-xs text-muted-foreground">Quality rating</p>
+            <p className="text-xs text-muted-foreground">
+              {(() => {
+                const trend = calculateTrend('sleepQuality', symptoms, 7);
+                if (trend.value === 0) return 'No data this week';
+                const isImproving = trend.direction === 'up' || trend.direction === 'stable';
+                return isImproving
+                  ? trend.direction === 'stable'
+                    ? 'Consistent quality'
+                    : 'Improving ✓'
+                  : 'Declining';
+              })()}
+            </p>
           </CardContent>
         </Card>
       </div>
+
+      {/* Symptom Insights Card */}
+      {symptoms.length > 0 && (() => {
+        const anxietyTrend = calculateTrend('anxietyLevel', symptoms, 7);
+        const depressionTrend = calculateTrend('depressionLevel', symptoms, 7);
+        const stressTrend = calculateTrend('stressLevel', symptoms, 7);
+        const painTrend = calculateTrend('painScale', symptoms, 7);
+        const sleepTrend = calculateTrend('sleepQuality', symptoms, 7);
+        const frequencyTrend = getSymptomFrequencyTrend(7);
+
+        const insights: { type: 'positive' | 'warning' | 'info'; message: string }[] = [];
+
+        // Frequency insights
+        if (frequencyTrend.direction === 'up' && Math.abs(frequencyTrend.percentChange) > 20) {
+          insights.push({
+            type: 'warning',
+            message: `Symptom logging increased by ${Math.abs(frequencyTrend.percentChange).toFixed(0)}% this week - you may be experiencing more symptoms than usual.`
+          });
+        } else if (frequencyTrend.direction === 'down' && Math.abs(frequencyTrend.percentChange) > 15) {
+          insights.push({
+            type: 'positive',
+            message: `Great news! Symptom frequency decreased by ${Math.abs(frequencyTrend.percentChange).toFixed(0)}% this week.`
+          });
+        }
+
+        // Anxiety insights
+        if (anxietyTrend.direction === 'down' && Math.abs(anxietyTrend.percentChange) > 15) {
+          insights.push({
+            type: 'positive',
+            message: `Anxiety levels improved by ${Math.abs(anxietyTrend.percentChange).toFixed(0)}% compared to last week. Keep up the great work!`
+          });
+        } else if (anxietyTrend.direction === 'up' && Math.abs(anxietyTrend.percentChange) > 20) {
+          insights.push({
+            type: 'warning',
+            message: `Anxiety levels increased ${Math.abs(anxietyTrend.percentChange).toFixed(0)}% this week. Consider reaching out to your care team.`
+          });
+        }
+
+        // Depression insights
+        if (depressionTrend.direction === 'down' && Math.abs(depressionTrend.percentChange) > 15) {
+          insights.push({
+            type: 'positive',
+            message: `Depression symptoms decreased by ${Math.abs(depressionTrend.percentChange).toFixed(0)}%. Progress is being made!`
+          });
+        } else if (depressionTrend.direction === 'up' && Math.abs(depressionTrend.percentChange) > 20) {
+          insights.push({
+            type: 'warning',
+            message: `Depression symptoms worsened by ${Math.abs(depressionTrend.percentChange).toFixed(0)}%. Please consult with your provider.`
+          });
+        }
+
+        // Stress insights
+        if (stressTrend.direction === 'down' && Math.abs(stressTrend.percentChange) > 10) {
+          insights.push({
+            type: 'positive',
+            message: `Stress levels dropped ${Math.abs(stressTrend.percentChange).toFixed(0)}% - your coping strategies are working!`
+          });
+        } else if (stressTrend.direction === 'up' && Math.abs(stressTrend.percentChange) > 25) {
+          insights.push({
+            type: 'warning',
+            message: `Stress increased significantly (${Math.abs(stressTrend.percentChange).toFixed(0)}%). Remember to practice self-care.`
+          });
+        }
+
+        // Pain insights
+        if (painTrend.value > 0) {
+          if (painTrend.direction === 'down' && Math.abs(painTrend.percentChange) > 15) {
+            insights.push({
+              type: 'positive',
+              message: `Pain levels reduced by ${Math.abs(painTrend.percentChange).toFixed(0)}%. Treatment may be helping.`
+            });
+          } else if (painTrend.direction === 'up' && Math.abs(painTrend.percentChange) > 20) {
+            insights.push({
+              type: 'warning',
+              message: `Pain increased ${Math.abs(painTrend.percentChange).toFixed(0)}% this week. Consider discussing pain management with your provider.`
+            });
+          }
+        }
+
+        // Sleep insights
+        if (sleepTrend.direction === 'up' && Math.abs(sleepTrend.percentChange) > 15) {
+          insights.push({
+            type: 'positive',
+            message: `Sleep quality improved by ${Math.abs(sleepTrend.percentChange).toFixed(0)}%. Better rest supports overall wellness!`
+          });
+        } else if (sleepTrend.direction === 'down' && Math.abs(sleepTrend.percentChange) > 20) {
+          insights.push({
+            type: 'warning',
+            message: `Sleep quality declined ${Math.abs(sleepTrend.percentChange).toFixed(0)}%. Poor sleep can worsen other symptoms.`
+          });
+        }
+
+        // Correlation insights
+        if (stressTrend.direction === 'up' && sleepTrend.direction === 'down') {
+          insights.push({
+            type: 'info',
+            message: 'Pattern detected: Higher stress correlates with poorer sleep. Focus on stress reduction before bedtime.'
+          });
+        }
+
+        if (anxietyTrend.direction === 'up' && depressionTrend.direction === 'up') {
+          insights.push({
+            type: 'warning',
+            message: 'Both anxiety and depression trending upward. Please contact your mental health provider soon.'
+          });
+        }
+
+        // Positive reinforcement
+        const improvingMetrics = [anxietyTrend, depressionTrend, stressTrend, painTrend]
+          .filter(t => t.value > 0 && t.direction === 'down').length;
+        if (improvingMetrics >= 3) {
+          insights.push({
+            type: 'positive',
+            message: `Excellent progress! ${improvingMetrics} key metrics are improving this week. Keep it up!`
+          });
+        }
+
+        if (insights.length === 0) {
+          insights.push({
+            type: 'info',
+            message: 'Symptoms are stable this week. Continue tracking to identify patterns over time.'
+          });
+        }
+
+        return (
+          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Brain className="h-5 w-5 text-blue-600" />
+                <CardTitle className="text-lg">Symptom Insights & Patterns</CardTitle>
+              </div>
+              <CardDescription>
+                AI-powered analysis of your symptom trends (last 7 days vs. previous 7 days)
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {insights.map((insight, index) => (
+                <div
+                  key={index}
+                  className={`flex gap-3 p-3 rounded-lg ${
+                    insight.type === 'positive'
+                      ? 'bg-green-50 border border-green-200'
+                      : insight.type === 'warning'
+                        ? 'bg-amber-50 border border-amber-200'
+                        : 'bg-blue-50 border border-blue-200'
+                  }`}
+                >
+                  {insight.type === 'positive' ? (
+                    <TrendingDown className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  ) : insight.type === 'warning' ? (
+                    <TrendingUp className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <Activity className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  )}
+                  <p className="text-sm text-gray-700">{insight.message}</p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        );
+      })()}
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center flex-1">
