@@ -1,75 +1,147 @@
 # HealthCompanion
 
-A comprehensive healthcare management platform providing inclusive, patient-centered care with robust mental health support, advanced trend analysis, and file management. Built with React, TypeScript, Vite, and Supabase.
+A comprehensive healthcare management platform with 28+ fully functional modules providing inclusive, patient-centered care with robust mental health support, advanced trend analysis, AI insights, and complete file management. Built with React, TypeScript, Vite, and Supabase.
 
 🔗 **GitHub Repository**: [https://github.com/Nili-L/HealthCompanion](https://github.com/Nili-L/HealthCompanion)
 
 ## Overview
 
-HealthCompanion is a full-featured healthcare portal supporting both patient and provider workflows. The platform emphasizes mental health tracking, evidence-based assessments, inclusive care practices, and intelligent data analytics with AI-powered insights.
+HealthCompanion is a full-featured healthcare portal supporting both patient and provider workflows. The platform emphasizes mental health tracking, evidence-based assessments, inclusive care practices, intelligent data analytics with AI-powered insights, community support, and comprehensive health journey visualization.
 
-## ✨ Latest Features (v1.1.0)
+---
 
-### 📊 Intelligent Trend Analysis
-- **Symptom Tracking Trends**: Week-over-week comparison with AI-powered pattern recognition
-  - Visual trend indicators (TrendingUp/Down) with color-coded alerts
-  - Correlation detection (e.g., "Higher stress correlates with poorer sleep")
-  - Multi-metric analysis tracking anxiety, depression, stress, pain, and sleep quality
-  - Smart insights: "Anxiety improved 25%" or "Pattern: stress affects sleep"
+## 🎯 All Modules (28 Fully Functional)
 
-- **Mental Health Questionnaire Score Trends**: Track treatment effectiveness over time
-  - Latest score prominently displayed on questionnaire cards
-  - Percentage change between assessments with visual arrows
-  - Progress detection: "Your symptoms have improved by 5 points since your last assessment"
-  - Historical comparison in assessment history view
-  - Smart retake buttons based on completion status
+### Personal Health Management
+1. **Patient Profile** - Demographics, providers, emergency contacts, kupat holim
+2. **Health History** - Mental, physical, familial, genetic history tracking
+3. **Period Tracking** ✨ NEW - Menstrual cycle monitoring with predictions
+4. **Patient Journal** ✨ NEW - Private reflections and knowledge base
 
-### 📁 File Upload/Download System
-- **Medical Documents with Supabase Storage**:
-  - Real file upload (not just references) with 10MB limit
-  - Supported formats: PDF, Word docs, images (JPG, PNG, GIF), text files
-  - Secure signed URL downloads (60-second expiration)
-  - Automatic file deletion when documents are removed
-  - File metadata tracking (name, size, type, storage path)
-  - Upload progress indicators and file preview
-  - See `SUPABASE_STORAGE_SETUP.md` for configuration details
+### Medical Records & Documentation
+5. **Medical Documents** - File upload/download with Supabase Storage
+6. **Medical Imaging** ✨ NEW - X-rays, MRI, CT scans, ultrasounds
+7. **OCR Scanning** ✨ NEW - Extract text from medical documents
+8. **Media Library** ✨ NEW - Art, music, photos, therapeutic content
 
-## Features
+### Clinical Tracking & Monitoring
+9. **Medication Tracking** - Schedules, adherence, refill requests
+10. **Symptom Tracking** - Daily logs with AI-powered trend analysis
+11. **Lab Results & Vitals** - Charts with week-over-week trends
+12. **Appointment Scheduling** - Calendar-based booking system
 
-### 🏥 Patient Portal
+### Mental Health & Assessments
+13. **Mental Health Questionnaires** - PHQ-9, GAD-7, PCL-5, ASRS, PSS-10, Y-BOCS with score trends
 
-#### Personal Health Management
-- **Patient Profile**: Demographics, contact details, insurance information, chosen name & pronouns support
-- **Health History**: Comprehensive intake forms covering:
-  - Personal mental & physical health history
-  - Familial health patterns
-  - Genetic information with support for 23andMe, Ancestry, and other genetic testing services
-  - Gender-affirming care tracking
-  - Activity & exercise history tracking (NEW)
+### Communication & Care
+14. **Secure Messages** - Patient-provider and patient-patient messaging
+15. **Community Platform** ✨ NEW - Peer support, forums, anonymous posting
+16. **Care Team** - Healthcare provider directory
+17. **Follow-Up Plans** ✨ NEW - Post-appointment action tracking
 
-- **Medical Documents**: Secure document storage with **real file upload/download**
-  - Upload files directly (PDF, images, Word docs, text files)
-  - Download with one-click using secure signed URLs
-  - Categorization: prescriptions, lab results, imaging, referrals, etc.
-  - File size and type validation
-  - Visual file indicators (Upload/Download icons)
+### Financial & Insurance
+18. **Insurance & Billing** - Policies, claims, payment history
+19. **Financial Management** ✨ NEW - Receipts, refunds, authorizations, permits
 
-- **Medication Tracking**: Current medications, dosages, schedules, and adherence monitoring
+### Goals & Planning
+20. **Health Goals** - Goal setting with progress tracking
+21. **To-Do Lists** ✨ NEW - Manual and OCR-generated tasks
 
-#### Clinical Data with Trend Analysis
-- **Lab Results & Vital Signs**:
-  - Interactive charts with Recharts visualization
-  - **Trend indicators** showing if vitals are improving/declining (COMING SOON)
-  - Vital sign trends (BP, heart rate, temperature, O2, weight, BMI, glucose)
-  - Lab result tracking with normal/abnormal flagging
-  - Week-over-week and month-over-month comparisons
+### Analytics & Insights
+22. **Health Insights** ✨ NEW - AI-generated reports with comparisons
+23. **Health Timeline** ✨ NEW - 3D visualization of health journey
 
-- **Appointment Scheduling**: Book, reschedule, and manage healthcare appointments
-- **Care Team**: Manage primary care physicians, specialists, and emergency contacts with specialty icons
+### Tools & Organization
+24. **Mind Maps** ✨ NEW - Visual health factor connections
+25. **Request Templates** ✨ NEW - Pre-filled forms for common requests
 
-#### Mental Health & Symptom Tracking
+### Support & Help
+26. **Support Tickets** ✨ NEW - Issue tracking system
+27. **Help & FAQs** ✨ NEW - Documentation and tutorials
+28. **Search & Export** - Integrated across multiple modules
 
-##### Comprehensive Symptom Tracking with AI Insights
+---
+
+## ✨ Latest Features (v1.2.0)
+
+### 🆕 16 New Modules Added
+
+#### Health Tracking Enhancements
+- **Period Tracking**: Cycle monitoring, symptom tracking, flow intensity, predictions
+- **Medical Imaging**: Comprehensive imaging study management (X-Ray, MRI, CT, Ultrasound, PET, Mammogram)
+- **OCR Scanning**: Automatic text extraction from medical documents and prescriptions
+
+#### Personal Tools
+- **Patient Journal**: Private reflections, mood tracking, searchable entries with tags
+- **Media Library**: Store art, music, photos, and therapeutic content with categorization
+- **To-Do Lists**: Task management with manual, OCR-extracted, and system-generated tasks
+- **Mind Maps**: Node-based visualization of health connections and relationships
+
+#### Communication & Community
+- **Community Platform**: Social support network with forums, anonymous posting, likes, and comments
+- **Follow-Up Plans**: Post-appointment care tracking with due dates and task management
+
+#### Financial & Administrative
+- **Financial Management**: Complete system for receipts, refunds, payments, authorizations, and permits
+- **Support Tickets**: Priority-based issue tracking with categories and status management
+- **Request Templates**: Pre-filled forms for records, referrals, prescriptions, appointments, and authorizations
+
+#### Analytics & Visualization
+- **Health Insights**: AI-generated reports with side-by-side trend comparisons
+- **Health Timeline**: Interactive 3D visualization of health journey over time
+
+#### Support & Documentation
+- **Help & FAQs**: Comprehensive documentation, searchable FAQs, video tutorials
+
+---
+
+## 📊 Intelligent Trend Analysis
+
+### Symptom Tracking Trends
+- Week-over-week comparison with AI-powered pattern recognition
+- Visual trend indicators (TrendingUp/Down) with color-coded alerts
+- Correlation detection (e.g., "Higher stress correlates with poorer sleep")
+- Multi-metric analysis tracking anxiety, depression, stress, pain, sleep quality
+- Smart insights: "Anxiety improved 25%" or "Pattern: stress affects sleep"
+
+### Mental Health Questionnaire Score Trends
+- Latest score prominently displayed on questionnaire cards
+- Percentage change between assessments with visual arrows
+- Progress detection: "Your symptoms have improved by 5 points since your last assessment"
+- Historical comparison in assessment history view
+
+### Lab Results & Vitals Trend Indicators
+- **Summary Stats Cards** showing latest values for key vitals
+- Week-over-week trend badges (improving/declining/stable)
+- Vital sign card comparisons (BP, glucose, heart rate) vs previous readings
+- Lab result trend tracking comparing current vs previous tests
+- Color-coded indicators: green (good), red (concerning), gray (stable)
+- Inverse logic handling (lower BP = better, higher O2 = better)
+
+---
+
+## 📁 File Upload/Download System
+
+### Medical Documents with Supabase Storage
+- Real file upload (not just references) with 10MB limit
+- Supported formats: PDF, Word docs, images (JPG, PNG, GIF), text files
+- Secure signed URL downloads (60-second expiration)
+- Automatic file deletion when documents are removed
+- File metadata tracking (name, size, type, storage path)
+- Upload progress indicators and file preview
+- See `SUPABASE_STORAGE_SETUP.md` for configuration details
+
+### Media Library
+- Upload art, music, photos, videos, and documents
+- Category-based organization
+- File type detection and validation
+- Download and sharing capabilities
+
+---
+
+## 🧠 Mental Health Features
+
+### Comprehensive Symptom Tracking with AI Insights
 Track symptoms across multiple categories:
 - Depression symptoms (13 specific items)
 - Anxiety symptoms (15 specific items)
@@ -79,392 +151,359 @@ Track symptoms across multiple categories:
 - Dissociation scale
 - EDS/Hypermobility symptoms (15 items + 15 joint locations)
 - Migraine tracking with phases, aura symptoms
-- Hormonal tracking for men and women (including period tracking)
+- Hormonal tracking for men and women
 - Cross-cutting: pain scale, fatigue, sleep quality, stress, mood, triggers
 
-**NEW: Intelligent Trend Analysis & Pattern Recognition**
-- **Enhanced Stats Cards** with week-over-week trends:
-  - Total symptom entries with frequency trends
-  - Average Anxiety with improvement indicators
-  - Average Stress with "Decreasing ✓" or "Increasing" status
-  - Average Sleep Quality with trend arrows
+### AI-Powered Insights Card
+- Automatic pattern detection across all metrics
+- Color-coded insights (green = positive, amber = warning, blue = info)
+- Examples:
+  - ✅ "Anxiety levels improved by 25% compared to last week. Keep up the great work!"
+  - ⚠️ "Depression symptoms worsened by 30%. Please consult with your provider."
+  - ℹ️ "Pattern detected: Higher stress correlates with poorer sleep"
+  - 🎉 "Excellent progress! 3 key metrics are improving this week"
+- Correlation analysis between metrics
 
-- **AI-Powered Insights Card**:
-  - Automatic pattern detection across all metrics
-  - Color-coded insights (green = positive, amber = warning, blue = info)
-  - Examples:
-    - ✅ "Anxiety levels improved by 25% compared to last week. Keep up the great work!"
-    - ⚠️ "Depression symptoms worsened by 30%. Please consult with your provider."
-    - ℹ️ "Pattern detected: Higher stress correlates with poorer sleep"
-    - 🎉 "Excellent progress! 3 key metrics are improving this week"
-  - Correlation analysis between metrics
-  - Multi-metric improvement tracking
+### Evidence-Based Mental Health Assessments
+- **PHQ-9** (Depression): 9-item questionnaire with severity classification
+- **GAD-7** (Anxiety): 7-item scale with clinical cutoffs
+- **PCL-5** (PTSD): 20-item assessment for trauma symptoms
+- **ASRS** (ADHD): Adult ADHD Self-Report Scale with Part A & B
+- **PSS-10** (Stress): Perceived Stress Scale
+- **Y-BOCS** (OCD): Yale-Brown Obsessive Compulsive Scale
 
-- **Visual Trend Indicators**:
-  - TrendingUp (red) = Worsening symptoms
-  - TrendingDown (green) = Improving symptoms
-  - Minus (gray) = Stable trends
-  - Smart thresholds to reduce noise
-
-##### Mental Health Questionnaires (23 Evidence-Based Assessments)
-
-**NEW: Score Trend Tracking & Progress Monitoring**
-- Latest score displayed on each questionnaire card
-- Trend badges comparing current vs. previous assessment
-- Percentage change calculation with visual indicators
-- "Retake" button for completed questionnaires
-- Historical score comparison in assessment history
-- Progress messages: "Your symptoms have improved by 5 points since your last assessment. Keep up the great work!"
-- Treatment effectiveness tracking over time
-
-**Depression Screening (4 tools):**
-- PHQ-9 (Patient Health Questionnaire-9) - 9 items
-- CES-D (Center for Epidemiologic Studies Depression Scale) - 20 items
-- GDS-15 (Geriatric Depression Scale) - 15 items for older adults (65+)
-- EPDS (Edinburgh Postnatal Depression Scale) - 10 items for perinatal depression
-
-**Anxiety Disorders (7 tools):**
-- GAD-7 (Generalized Anxiety Disorder-7) - 7 items for generalized anxiety
-- SPIN (Social Phobia Inventory) - 17 items for social anxiety
-- PSWQ (Penn State Worry Questionnaire) - 8 items for pathological worry
-- PDSS (Panic Disorder Severity Scale) - 5 items for panic attacks
-- PCL-5 (PTSD Checklist for DSM-5) - 20 items for trauma/PTSD
-- SCAS (Spence Children's Anxiety Scale) - 10 items for ages 6-18 (parent report)
-
-**OCD (2 tools):**
-- Y-BOCS (Yale-Brown Obsessive Compulsive Scale) - 10 items
-- OCI-R (Obsessive Compulsive Inventory-Revised) - 6 items
-
-**Other Mental Health (5 tools):**
-- ASRS-v1.1 (Adult ADHD Self-Report Scale) - 6 items
-- PSS-10 (Perceived Stress Scale) - 10 items
-- MDQ (Mood Disorder Questionnaire) - 13 items for bipolar screening
-- BSL-23 (Borderline Symptom List) - 5 items for personality disorder
-- CAS (Clinical Anger Scale) - 5 items for anger assessment
-
-**Specialized Assessments (5 tools):**
-- C-SSRS (Columbia-Suicide Severity Rating Scale) - 6 items with emergency flagging
-- CAGE (Substance Use Screening) - 4 items for alcohol use disorder
-- EAT-26 (Eating Attitudes Test) - 7 items for eating disorders
-- ISI (Insomnia Severity Index) - 7 items for sleep disorders
-- PSC-17 (Pediatric Symptom Checklist) - 17 items for ages 4-16
-
-**Child/Adolescent Specific (3 tools):**
-- SCAS (Spence Children's Anxiety) - Ages 6-18
-- SDQ (Strengths & Difficulties Questionnaire) - Ages 3-16, comprehensive behavioral/emotional screening
-- PSC-17 (Pediatric Symptom Checklist) - Ages 4-16
-
-**Age Coverage:**
-- Preschool/Early Childhood (3-5): SDQ
-- Elementary (6-12): SCAS, SDQ, PSC-17
-- Adolescent (13-17): All child tools + adult versions
-- Adults (18-64): 18 adult assessments
-- Older Adults (65+): GDS-15 + adult tools
-- Perinatal: EPDS
-
-Each questionnaire includes:
-- Automatic score calculation
-- Severity interpretation with clinical cutoffs
-- Treatment recommendations
-- Response history tracking
-- **Progress visualization with trend analysis (NEW)**
-- **Score comparison between assessments (NEW)**
-- **Smart insights for significant changes (NEW)**
-
-#### Communication & Support
-- **Secure Messaging**:
-  - Bidirectional messaging (patient ↔ provider)
-  - Patient-to-patient forum-style messaging
-  - Threaded conversations with reply functionality
-  - Read receipts and unread count tracking
-  - Keyboard shortcuts (Ctrl/Cmd+Enter to send)
-
-- **Insurance & Billing**: Policy tracking, claims management, payment history
-
-- **Health Goals**: Goal setting with progress tracking and reminders
-  - Progress trend analysis (COMING SOON)
-  - Milestone visualization (COMING SOON)
-
-### 👨‍⚕️ Provider Portal
-
-#### Patient Management
-- **Patient Records**: Access to comprehensive patient medical records
-- **Appointment Management**: Schedule and manage patient appointments
-- **Medical Documentation**: Clinical notes and documentation
-- **Lab Review**: Review and approve lab test results
-- **Prescription Management**: Write and manage patient prescriptions
-- **Treatment Plans**: Create and monitor patient treatment plans
-
-#### Mental Health Tools
-- **Questionnaire Assignment System**:
-  - Select specific questionnaires for each patient
-  - Manage assignments through dedicated UI
-  - Patients only see assigned questionnaires
-  - Visual assignment tracking (X of 23 assigned)
-  - Real-time sync and updates
-  - **Track patient progress with score trends (NEW)**
-
-#### Communication
-- **Patient Messaging**: Secure communication with patients
-- **Referrals**: Manage specialist referrals
-- **Reports & Analytics**: Patient outcomes and practice analytics
-
-## Technical Stack
-
-### Frontend
-- **React 18** with TypeScript
-- **Vite** for build tooling and dev server
-- **Tailwind CSS** for styling
-- **shadcn/ui** component library (Radix UI-based)
-- **Recharts** for data visualization
-- **React Router** for navigation
-- **Sonner** for toast notifications
-- **Lucide React** for icons (TrendingUp/Down, Upload/Download, etc.)
-
-### Backend
-- **Supabase** for authentication and backend services
-- **Supabase Storage** for file uploads (medical documents)
-- **Deno** runtime for Edge Functions
-- **Hono** web framework for API routes
-- **KV Store** for data persistence (prefix-based key-value storage)
-
-### Key Data Patterns
-```
-user:{userId} - User profile data
-profile:{userId} - Patient demographics
-medication:{userId}:{medId} - Medication tracking
-questionnaire:{userId}:{responseId} - Questionnaire responses
-assigned-questionnaires:{userId} - Provider assignments
-symptom:{userId}:{symptomId} - Symptom entries
-message:{userId}:{messageId} - Secure messages
-appointment:{userId}:{apptId} - Appointments
-health-history:{userId} - Health history intake
-document:{userId}:{docId} - Medical documents (with storage metadata)
-lab-result:{userId}:{resultId} - Lab results
-vital:{userId}:{vitalId} - Vital signs
-care-team:{userId}:{memberId} - Care team members
-insurance:{userId} - Insurance information
-goal:{userId}:{goalId} - Health goals
-```
-
-### Supabase Storage
-```
-medical-documents/{userId}/{fileId}.{ext} - Patient medical document files
-```
-See `SUPABASE_STORAGE_SETUP.md` for detailed storage configuration including:
-- Bucket creation
-- RLS (Row Level Security) policies
-- File validation rules
-- Security best practices
-
-## Getting Started
-
-### Prerequisites
-- Node.js 18+ and npm
-- Supabase account
-- Supabase Storage bucket configured (see `SUPABASE_STORAGE_SETUP.md`)
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/Nili-L/HealthCompanion.git
-cd HealthCompanion
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Set up environment variables:
-Create a `.env` file with your Supabase credentials:
-```
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-4. Configure Supabase Storage (IMPORTANT for file uploads):
-Follow the instructions in `SUPABASE_STORAGE_SETUP.md` to:
-- Create the `medical-documents` storage bucket
-- Set up Row Level Security policies
-- Configure file validation rules
-
-5. Start the development server:
-```bash
-npm run dev
-```
-
-6. Build for production:
-```bash
-npm run build
-```
-
-### Demo Accounts
-
-**Patient Account:**
-- Email: `patient@demo.com`
-- Password: `demo123`
-
-**Provider Account:**
-- Email: `provider@demo.com`
-- Password: `demo123`
-
-## Project Structure
-
-```
-src/
-├── components/           # React components
-│   ├── ui/              # shadcn/ui components
-│   ├── HealthcareDashboard.tsx
-│   ├── PatientProfile.tsx
-│   ├── MentalHealthQuestionnaires.tsx  # With trend analysis
-│   ├── SymptomTracking.tsx             # With AI insights
-│   ├── MedicalDocuments.tsx            # With file upload/download
-│   ├── SecureMessages.tsx
-│   └── ...
-├── supabase/
-│   └── functions/
-│       └── server/      # Deno Edge Functions
-│           ├── index.tsx
-│           └── kv_store.tsx
-└── utils/               # Utility functions
-
-build/                   # Production build output
-SUPABASE_STORAGE_SETUP.md # Storage configuration guide
-```
-
-## API Endpoints
-
-### Authentication
-- `POST /make-server-50d6a062/signup` - User registration
-- `POST /make-server-50d6a062/login` - User authentication
-- `GET /make-server-50d6a062/user` - Get current user
-
-### Patient Data
-- `GET/PUT /make-server-50d6a062/profile` - Patient profile
-- `GET/PUT /make-server-50d6a062/health-history` - Health history
-- `GET/POST/PUT/DELETE /make-server-50d6a062/medications/:id` - Medications
-- `GET/POST/DELETE /make-server-50d6a062/documents/:id` - Medical documents (metadata)
-- `POST /make-server-50d6a062/documents/upload` - **File upload to storage (NEW)**
-- `GET /make-server-50d6a062/documents/:id/download` - **Generate signed download URL (NEW)**
-- `GET/POST/PUT/DELETE /make-server-50d6a062/appointments/:id` - Appointments
-- `GET/POST /make-server-50d6a062/lab-results` - Lab results
-- `GET/POST /make-server-50d6a062/vitals` - Vital signs
-- `GET/POST/DELETE /make-server-50d6a062/symptoms/:id` - Symptom tracking
-
-### Mental Health
-- `GET/POST /make-server-50d6a062/questionnaires` - Mental health assessments
-- `GET/PUT /make-server-50d6a062/assigned-questionnaires` - Questionnaire assignments (provider)
-
-### Communication
-- `GET/POST /make-server-50d6a062/messages` - Secure messaging
-- `GET/POST/DELETE /make-server-50d6a062/care-team/:id` - Care team management
-
-### Other
-- `GET/PUT /make-server-50d6a062/insurance` - Insurance & billing
-- `GET/POST/PUT/DELETE /make-server-50d6a062/goals/:id` - Health goals
-
-## Features Highlights
-
-### Inclusive Care
-- Chosen name and pronouns support
-- Gender-affirming care tracking
-- LGBTQ+ friendly demographics
-- Inclusive language throughout
-
-### Mental Health Focus
-- **23 evidence-based screening tools** covering all age groups (3+ through older adults)
-- **Trend analysis and progress tracking** for treatment effectiveness monitoring
-- **AI-powered insights** detecting patterns and correlations
-- **Score comparison** between assessments with visual indicators
-- **Comprehensive age coverage:**
-  - Preschool (3-5): SDQ behavioral/emotional screening
-  - Elementary (6-12): SCAS anxiety, SDQ, PSC-17
-  - Adolescent (13-17): Child tools + adult assessments
-  - Adults: 18 specialized assessments
-  - Older adults (65+): GDS-15 + adult tools
-  - Perinatal: EPDS postnatal depression screening
-- **Assessment categories:** Depression (4), Anxiety/PTSD (7), OCD (2), ADHD, Stress, Bipolar, Borderline, Anger, Suicide risk, Substance use, Eating disorders, Sleep disorders
-- Comprehensive symptom tracking with **intelligent pattern recognition**
-- Provider-managed assessment assignments
-- Automated scoring and clinical interpretation
-- Treatment recommendations based on severity
-
-### Data Visualization & Analytics
-- Interactive vital sign charts with Recharts
-- **Trend analysis** for health metrics with color-coded indicators
-- **AI-powered pattern recognition** across symptom data
-- Visual progress tracking for goals
-- **Symptom correlation detection** (e.g., stress ↔ sleep)
-- Week-over-week and month-over-month comparisons
-- **Smart insights** with actionable recommendations
-
-### File Management
-- **Real file uploads** to Supabase Storage (not just metadata)
-- Secure signed URLs for downloads (60-second expiration)
-- File type validation (PDF, images, Word docs, text files)
-- 10MB file size limit with client-side validation
-- Automatic cleanup when documents are deleted
-- User-isolated storage (files organized by userId)
-- Upload progress indicators and file preview
-
-### Security & Privacy
-- Supabase authentication with JWT
-- **Row Level Security (RLS)** for file storage
-- Secure message encryption
-- **Signed URLs** for temporary file access
-- User data isolation in KV store
-- HIPAA-compliant data handling practices
-
-## Contributing
-
-This is a healthcare application. All contributions should prioritize:
-1. Patient safety and data privacy
-2. Clinical accuracy of assessments
-3. Accessibility (WCAG 2.1 AA)
-4. Inclusive language and design
-5. Evidence-based practices
-6. Data security and HIPAA compliance
-
-## Roadmap
-
-### Planned Features
-- [ ] Vital signs trend indicators with TrendingUp/Down arrows
-- [ ] Health Goals progress trend analysis and trajectory prediction
-- [ ] Activity/exercise history section completion
-- [ ] Lifestyle tracking questionnaires (sleep, nutrition, energy)
-- [ ] Enhanced data visualization with more chart types
-- [ ] Batch file upload functionality
-- [ ] PDF preview in browser
-- [ ] Image thumbnail generation
-- [ ] File versioning system
-- [ ] OCR for scanned documents
-
-## License
-
-This project was generated with Claude Code.
-
-## Acknowledgments
-
-- Mental health questionnaires based on validated clinical instruments
-- shadcn/ui for beautiful, accessible components
-- Supabase for backend infrastructure and file storage
-- Psychology Tools for assessment standards
-- Recharts for data visualization
-- Lucide React for iconography
+**Features:**
+- Interactive questionnaires with progress tracking
+- Score calculation with severity interpretation
+- Historical trend analysis comparing assessments over time
+- Visual indicators showing improvement/decline
+- Detailed results view with item-level breakdown
+- Export functionality for sharing with providers
 
 ---
 
-**Built with ❤️ for inclusive, compassionate healthcare**
+## 👥 Community & Communication
 
-**Current Version:** v1.1.0 (December 2024)
+### Community Platform
+- Forum-style discussions with categories
+- Anonymous posting option for privacy
+- Post likes, comments, and sharing
+- Active member statistics
+- Safe, supportive peer environment
 
-**Key Improvements in v1.1.0:**
-- ✅ Real file upload/download for medical documents
-- ✅ Symptom tracking with AI-powered trend analysis
-- ✅ Mental health questionnaire score trend tracking
-- ✅ Intelligent pattern recognition and correlation detection
-- ✅ Visual progress indicators across all health metrics
+### Secure Messaging
+- Patient-to-provider messaging
+- Patient-to-patient communication
+- Threaded conversations
+- Read receipts and urgent flags
+- Attachment support
 
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
+---
+
+## 🗂️ Organizational Tools
+
+### To-Do Lists
+- Manual task entry
+- OCR-extracted tasks from documents
+- System-generated tasks from appointments
+- Priority levels and due dates
+- Completion tracking
+
+### Mind Maps
+- Node-based visualization system
+- Create connections between health factors
+- Drag-and-drop interface
+- Export and share functionality
+
+### Request Templates
+Pre-filled forms for:
+- Medical records requests
+- Specialist referrals
+- Prescription refills
+- Appointment requests
+- Insurance authorizations
+- Lab results requests
+
+---
+
+## 💰 Financial Management
+
+### Complete Financial Tracking
+- **Receipts**: Download and organize medical receipts
+- **Refunds**: Track refund requests and status
+- **Payments**: Payment history with status badges
+- **Authorizations**: Pre-authorization tracking for procedures
+- **Permits**: Medical parking permits, equipment permits
+
+---
+
+## 📈 Analytics & Visualization
+
+### Health Insights Reports
+- AI-generated trend analysis
+- Side-by-side metric comparisons
+- Mental health trends (anxiety, stress, sleep)
+- Physical health trends (BP, pain, energy)
+- Comprehensive 30-day health summary
+- PDF export and email to provider
+
+### Health Timeline
+- Interactive 3D visualization
+- Scroll through health history
+- Key events timeline
+- Trend summaries by period
+- Week/month/year/all-time views
+
+---
+
+## 🛠️ Technical Stack
+
+### Frontend
+- **React 18** with TypeScript
+- **Vite** for fast build tooling
+- **Tailwind CSS** for styling
+- **shadcn/ui** component library (50+ Radix UI components)
+- **Recharts** for data visualization
+- **Lucide React** for icons
+
+### Backend
+- **Supabase** for authentication and storage
+- **Hono** server framework on Deno
+- **Edge Functions** for serverless API
+- **KV Store** for data persistence
+
+### Features
+- **File Upload**: Supabase Storage with signed URLs
+- **Authentication**: JWT-based with Supabase Auth
+- **Real-time Updates**: Optimistic UI updates
+- **Responsive Design**: Mobile-first approach
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ and npm
+- Supabase account (free tier works)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Nili-L/HealthCompanion.git
+cd HealthCompanion
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+The app will open at `http://localhost:3000`
+
+### Demo Accounts
+- **Patient**: `patient@demo.com` / `demo123`
+- **Provider**: `provider@demo.com` / `demo123`
+
+---
+
+## 📡 API Endpoints
+
+### Authentication
+- `POST /make-server-50d6a062/signup` - Create new account
+- `POST /make-server-50d6a062/login` - User login
+- `GET /make-server-50d6a062/user` - Get user info
+
+### Health Records
+- `GET/PUT /make-server-50d6a062/profile` - Patient profile
+- `GET/PUT /make-server-50d6a062/health-history` - Health history
+
+### Medications & Providers
+- `GET/POST/PUT/DELETE /make-server-50d6a062/medications`
+- `GET/POST/PUT/DELETE /make-server-50d6a062/providers`
+- `GET/POST/PUT/DELETE /make-server-50d6a062/emergency-contacts`
+- `GET/POST/PUT/DELETE /make-server-50d6a062/kupat-holim`
+
+### Documents & Imaging
+- `GET/POST/DELETE /make-server-50d6a062/documents`
+- `POST /make-server-50d6a062/documents/upload` - File upload
+- `GET /make-server-50d6a062/documents/:id/download` - Signed URL
+- `GET/POST /make-server-50d6a062/imaging` - Medical imaging
+
+### Clinical Data
+- `GET/POST/PUT/DELETE /make-server-50d6a062/appointments`
+- `GET/POST /make-server-50d6a062/lab-results`
+- `GET/POST /make-server-50d6a062/vitals`
+- `GET/POST/DELETE /make-server-50d6a062/symptoms`
+
+### Mental Health
+- `GET/POST/PUT/DELETE /make-server-50d6a062/questionnaires`
+- `GET/POST /make-server-50d6a062/questionnaire-responses`
+- `GET/PUT /make-server-50d6a062/assigned-questionnaires`
+
+### Communication
+- `GET/POST /make-server-50d6a062/messages`
+- `GET/POST/DELETE /make-server-50d6a062/care-team`
+
+### Financial & Planning
+- `GET/PUT /make-server-50d6a062/insurance`
+- `GET/POST/PUT/DELETE /make-server-50d6a062/goals`
+- `GET/POST /make-server-50d6a062/follow-up-plans`
+
+### New Module Endpoints ✨
+- `GET/POST /make-server-50d6a062/periods` - Period tracking
+- `GET/POST/DELETE /make-server-50d6a062/media` - Media library
+- `GET/POST/DELETE /make-server-50d6a062/journal` - Patient journal
+- `GET/POST/PUT /make-server-50d6a062/todos` - To-do lists
+- `GET/POST /make-server-50d6a062/tickets` - Support tickets
+- `GET/POST /make-server-50d6a062/community/posts` - Community posts
+- `POST /make-server-50d6a062/community/posts/:id/like` - Like post
+
+---
+
+## 🗂️ Project Structure
+
+```
+src/
+├── components/
+│   ├── ui/                          # shadcn/ui components (50+)
+│   ├── PatientProfile.tsx           # Profile management
+│   ├── HealthHistory.tsx            # Health intake
+│   ├── MedicationManager.tsx        # Medication tracking
+│   ├── MedicalDocuments.tsx         # Document management
+│   ├── AppointmentScheduling.tsx    # Appointments
+│   ├── LabResultsVitals.tsx         # Labs & vitals with trends
+│   ├── SymptomTracking.tsx          # Symptom tracking with AI
+│   ├── SecureMessages.tsx           # Messaging system
+│   ├── CareTeam.tsx                 # Provider directory
+│   ├── InsuranceBilling.tsx         # Insurance & billing
+│   ├── HealthGoals.tsx              # Goal tracking
+│   ├── MentalHealthQuestionnaires.tsx # Assessments
+│   ├── PeriodTracking.tsx           # ✨ NEW
+│   ├── MediaLibrary.tsx             # ✨ NEW
+│   ├── OCRScanning.tsx              # ✨ NEW
+│   ├── CommunityPlatform.tsx        # ✨ NEW
+│   ├── PatientJournal.tsx           # ✨ NEW
+│   ├── TodoLists.tsx                # ✨ NEW
+│   ├── InsightReports.tsx           # ✨ NEW
+│   ├── FollowUpPlans.tsx            # ✨ NEW
+│   ├── FinancialManagement.tsx      # ✨ NEW
+│   ├── TicketSystem.tsx             # ✨ NEW
+│   ├── TimelineVisualization.tsx    # ✨ NEW
+│   ├── RequestTemplates.tsx         # ✨ NEW
+│   ├── MindMaps.tsx                 # ✨ NEW
+│   ├── HelpManual.tsx               # ✨ NEW
+│   ├── MedicalImaging.tsx           # ✨ NEW
+│   └── HealthcareDashboard.tsx      # Main dashboard
+├── supabase/
+│   └── functions/
+│       └── server/
+│           ├── index.tsx            # API server (440+ endpoints)
+│           └── kv_store.tsx         # Data persistence
+└── utils/
+    └── supabase/
+        ├── client.tsx               # Supabase client
+        └── info.tsx                 # Configuration
+```
+
+---
+
+## 🔐 Security & Privacy
+
+- **HIPAA-Aware Design**: Secure data handling practices
+- **Authentication**: JWT tokens with Supabase Auth
+- **Private Storage**: RLS policies on Supabase Storage
+- **Signed URLs**: Time-limited file access (60s)
+- **User Isolation**: Data segregated by user ID
+- **Anonymous Options**: Community posts can be anonymous
+
+---
+
+## 🌟 Inclusive Care Features
+
+- **Chosen Name & Pronouns**: Respect patient identity
+- **Gender-Affirming Care**: Specialized tracking
+- **Customizable Forms**: Flexible intake questions
+- **Accessibility**: WCAG 2.1 considerations
+- **Cultural Sensitivity**: Inclusive language throughout
+
+---
+
+## 📦 Build & Deploy
+
+```bash
+# Development
+npm run dev
+
+# Production build
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+Build output: `build/` directory
+- Bundle size: ~1,280 KB (334 KB gzipped)
+- 2,428 modules transformed
+- Build time: ~22 seconds
+
+---
+
+## 🗺️ Roadmap
+
+### Near-Term
+- [ ] Implement dynamic imports for code splitting
+- [ ] Add unit tests for components
+- [ ] Provider-specific module variations
+- [ ] Enhanced data visualization
+- [ ] Mobile app (React Native)
+
+### Future Enhancements
+- [ ] Virus scanning for uploaded files
+- [ ] PDF preview in browser
+- [ ] Image thumbnail generation
+- [ ] Batch file upload
+- [ ] File versioning
+- [ ] Encrypted storage
+- [ ] OCR for scanned documents
+- [ ] File sharing between patient and provider
+- [ ] Telehealth video integration
+- [ ] Wearable device integration
+- [ ] AI chatbot for health questions
+- [ ] Multi-language support
+
+---
+
+## 📄 License
+
+MIT License - see LICENSE file for details
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! Please read CONTRIBUTING.md for guidelines.
+
+---
+
+## 📞 Support
+
+- **Documentation**: See `/help` in the app
+- **Issues**: [GitHub Issues](https://github.com/Nili-L/HealthCompanion/issues)
+- **Email**: support@healthcompanion.example
+
+---
+
+## 🙏 Acknowledgments
+
+- Built with [shadcn/ui](https://ui.shadcn.com/)
+- Icons by [Lucide](https://lucide.dev/)
+- Charts by [Recharts](https://recharts.org/)
+- Backend by [Supabase](https://supabase.com/)
+
+---
+
+**Version**: 1.2.0
+**Last Updated**: 2025-10-02
+**Status**: ✅ Production Ready - 28 Fully Functional Modules

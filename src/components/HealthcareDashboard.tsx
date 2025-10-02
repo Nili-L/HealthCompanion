@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { 
+import {
   User,
   FileText,
   Scan,
@@ -28,7 +28,9 @@ import {
   Plus,
   Edit,
   Trash2,
-  Brain
+  Brain,
+  Image,
+  CheckSquare
 } from "lucide-react";
 import { projectId, publicAnonKey } from "../utils/supabase/info";
 import { PatientProfile } from "./PatientProfile";
@@ -43,6 +45,21 @@ import { CareTeam } from "./CareTeam";
 import { InsuranceBilling } from "./InsuranceBilling";
 import { HealthGoals } from "./HealthGoals";
 import { MentalHealthQuestionnaires } from "./MentalHealthQuestionnaires";
+import { PeriodTracking } from "./PeriodTracking";
+import { MediaLibrary } from "./MediaLibrary";
+import { OCRScanning } from "./OCRScanning";
+import { CommunityPlatform } from "./CommunityPlatform";
+import { PatientJournal } from "./PatientJournal";
+import { TodoLists } from "./TodoLists";
+import { InsightReports } from "./InsightReports";
+import { FollowUpPlans } from "./FollowUpPlans";
+import { FinancialManagement } from "./FinancialManagement";
+import { TicketSystem } from "./TicketSystem";
+import { TimelineVisualization } from "./TimelineVisualization";
+import { RequestTemplates } from "./RequestTemplates";
+import { MindMaps } from "./MindMaps";
+import { HelpManual } from "./HelpManual";
+import { MedicalImaging } from "./MedicalImaging";
 
 interface ModuleDetailViewProps {
   moduleTitle: string;
@@ -98,6 +115,66 @@ function ModuleDetailView({ moduleTitle, role, accessToken }: ModuleDetailViewPr
 
   if (moduleTitle === "Mental Health Questionnaires") {
     return <MentalHealthQuestionnaires accessToken={accessToken} role={role} />;
+  }
+
+  if (moduleTitle === "Period Tracking") {
+    return <PeriodTracking accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Media Library") {
+    return <MediaLibrary accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Medical Imaging") {
+    return <MedicalImaging accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "OCR Scanning") {
+    return <OCRScanning accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Community Platform") {
+    return <CommunityPlatform accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Patient Journal") {
+    return <PatientJournal accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "To-Do Lists") {
+    return <TodoLists accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Health Insights") {
+    return <InsightReports accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Follow-Up Plans") {
+    return <FollowUpPlans accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Financial Management") {
+    return <FinancialManagement accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Support Tickets") {
+    return <TicketSystem accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Health Timeline") {
+    return <TimelineVisualization accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Request Templates") {
+    return <RequestTemplates accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Mind Maps") {
+    return <MindMaps accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Help & FAQs") {
+    return <HelpManual accessToken={accessToken} />;
   }
 
   // Default view for modules without custom components yet
@@ -348,6 +425,90 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       icon: <Brain className="h-4 w-4" />,
       status: "active" as const,
       isNew: true
+    },
+    {
+      title: "Period Tracking",
+      description: "Menstrual cycle tracking and symptom monitoring",
+      icon: <Calendar className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Media Library",
+      description: "Uploaded art, music, photos, and other media",
+      icon: <Image className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "OCR Scanning",
+      description: "Extract text from medical documents",
+      icon: <Scan className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Community Platform",
+      description: "Connect with other patients and share experiences",
+      icon: <MessageSquare className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Patient Journal",
+      description: "Personal knowledge base and reflections",
+      icon: <FileText className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "To-Do Lists",
+      description: "Generated tasks from documents and appointments",
+      icon: <CheckSquare className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Health Insights",
+      description: "AI-generated reports with side-by-side comparisons",
+      icon: <TrendingUp className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Follow-Up Plans",
+      description: "Post-appointment care plans and tracking",
+      icon: <Calendar className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Financial Management",
+      description: "Receipts, refunds, payments, authorizations, permits",
+      icon: <FileCheck className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Support Tickets",
+      description: "Submit and track support requests",
+      icon: <HelpCircle className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Health Timeline",
+      description: "3D visualization of health journey over time",
+      icon: <Activity className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Request Templates",
+      description: "Pre-filled forms for common requests",
+      icon: <FileText className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Mind Maps",
+      description: "Visualize connections between health factors",
+      icon: <Brain className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Help & FAQs",
+      description: "Documentation, tutorials, and support",
+      icon: <HelpCircle className="h-4 w-4" />
     },
     {
       title: "Self-Care Tracker",

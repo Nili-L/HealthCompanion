@@ -1882,4 +1882,448 @@ app.put("/make-server-50d6a062/assigned-questionnaires", async (c) => {
   }
 });
 
+// ========== PERIOD TRACKING ENDPOINTS ==========
+app.get("/make-server-50d6a062/periods", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const periods = await kv.getByPrefix(`period:${user.id}:`);
+    return c.json({ periods: periods.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()) });
+  } catch (error) {
+    console.error('Get periods error:', error);
+    return c.json({ error: 'Failed to fetch periods' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/periods", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const periodData = await c.req.json();
+    const periodId = crypto.randomUUID();
+
+    const period = {
+      id: periodId,
+      ...periodData,
+      createdAt: new Date().toISOString()
+    };
+
+    await kv.set(`period:${user.id}:${periodId}`, period);
+    return c.json({ success: true, period });
+  } catch (error) {
+    console.error('Add period error:', error);
+    return c.json({ error: 'Failed to add period' }, 500);
+  }
+});
+
+// ========== MEDIA LIBRARY ENDPOINTS ==========
+app.get("/make-server-50d6a062/media", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const mediaItems = await kv.getByPrefix(`media:${user.id}:`);
+    return c.json({ mediaItems: mediaItems.sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()) });
+  } catch (error) {
+    console.error('Get media error:', error);
+    return c.json({ error: 'Failed to fetch media' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/media", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const mediaData = await c.req.json();
+    const mediaId = crypto.randomUUID();
+
+    const media = {
+      id: mediaId,
+      ...mediaData,
+      uploadedAt: new Date().toISOString()
+    };
+
+    await kv.set(`media:${user.id}:${mediaId}`, media);
+    return c.json({ success: true, media });
+  } catch (error) {
+    console.error('Add media error:', error);
+    return c.json({ error: 'Failed to add media' }, 500);
+  }
+});
+
+app.delete("/make-server-50d6a062/media/:id", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const mediaId = c.req.param('id');
+    await kv.delete(`media:${user.id}:${mediaId}`);
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Delete media error:', error);
+    return c.json({ error: 'Failed to delete media' }, 500);
+  }
+});
+
+// ========== MEDICAL IMAGING ENDPOINTS ==========
+app.get("/make-server-50d6a062/imaging", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const studies = await kv.getByPrefix(`imaging:${user.id}:`);
+    return c.json({ studies: studies.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) });
+  } catch (error) {
+    console.error('Get imaging error:', error);
+    return c.json({ error: 'Failed to fetch imaging studies' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/imaging", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const imagingData = await c.req.json();
+    const imagingId = crypto.randomUUID();
+
+    const study = {
+      id: imagingId,
+      ...imagingData,
+      imageCount: 0,
+      createdAt: new Date().toISOString()
+    };
+
+    await kv.set(`imaging:${user.id}:${imagingId}`, study);
+    return c.json({ success: true, study });
+  } catch (error) {
+    console.error('Add imaging error:', error);
+    return c.json({ error: 'Failed to add imaging study' }, 500);
+  }
+});
+
+// ========== JOURNAL ENDPOINTS ==========
+app.get("/make-server-50d6a062/journal", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const entries = await kv.getByPrefix(`journal:${user.id}:`);
+    return c.json({ entries: entries.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) });
+  } catch (error) {
+    console.error('Get journal error:', error);
+    return c.json({ error: 'Failed to fetch journal entries' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/journal", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const entryData = await c.req.json();
+    const entryId = crypto.randomUUID();
+
+    const entry = {
+      id: entryId,
+      ...entryData,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    await kv.set(`journal:${user.id}:${entryId}`, entry);
+    return c.json({ success: true, entry });
+  } catch (error) {
+    console.error('Add journal entry error:', error);
+    return c.json({ error: 'Failed to add journal entry' }, 500);
+  }
+});
+
+app.delete("/make-server-50d6a062/journal/:id", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const entryId = c.req.param('id');
+    await kv.delete(`journal:${user.id}:${entryId}`);
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Delete journal entry error:', error);
+    return c.json({ error: 'Failed to delete entry' }, 500);
+  }
+});
+
+// ========== TODO LISTS ENDPOINTS ==========
+app.get("/make-server-50d6a062/todos", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const todos = await kv.getByPrefix(`todo:${user.id}:`);
+    return c.json({ todos: todos.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) });
+  } catch (error) {
+    console.error('Get todos error:', error);
+    return c.json({ error: 'Failed to fetch todos' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/todos", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const todoData = await c.req.json();
+    const todoId = crypto.randomUUID();
+
+    const todo = {
+      id: todoId,
+      ...todoData,
+      completed: false,
+      createdAt: new Date().toISOString()
+    };
+
+    await kv.set(`todo:${user.id}:${todoId}`, todo);
+    return c.json({ success: true, todo });
+  } catch (error) {
+    console.error('Add todo error:', error);
+    return c.json({ error: 'Failed to add todo' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/todos/:id", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const todoId = c.req.param('id');
+    const updates = await c.req.json();
+
+    const existing = await kv.get(`todo:${user.id}:${todoId}`);
+    if (!existing) return c.json({ error: 'Todo not found' }, 404);
+
+    const updated = { ...existing, ...updates };
+    await kv.set(`todo:${user.id}:${todoId}`, updated);
+    return c.json({ success: true, todo: updated });
+  } catch (error) {
+    console.error('Update todo error:', error);
+    return c.json({ error: 'Failed to update todo' }, 500);
+  }
+});
+
+// ========== FOLLOW-UP PLANS ENDPOINTS ==========
+app.get("/make-server-50d6a062/follow-up-plans", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const plans = await kv.getByPrefix(`follow-up-plan:${user.id}:`);
+    return c.json({ plans: plans.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()) });
+  } catch (error) {
+    console.error('Get follow-up plans error:', error);
+    return c.json({ error: 'Failed to fetch plans' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/follow-up-plans", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const planData = await c.req.json();
+    const planId = crypto.randomUUID();
+
+    const plan = {
+      id: planId,
+      ...planData,
+      createdAt: new Date().toISOString()
+    };
+
+    await kv.set(`follow-up-plan:${user.id}:${planId}`, plan);
+    return c.json({ success: true, plan });
+  } catch (error) {
+    console.error('Add follow-up plan error:', error);
+    return c.json({ error: 'Failed to add plan' }, 500);
+  }
+});
+
+// ========== TICKET SYSTEM ENDPOINTS ==========
+app.get("/make-server-50d6a062/tickets", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const tickets = await kv.getByPrefix(`ticket:${user.id}:`);
+    return c.json({ tickets: tickets.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) });
+  } catch (error) {
+    console.error('Get tickets error:', error);
+    return c.json({ error: 'Failed to fetch tickets' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/tickets", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const ticketData = await c.req.json();
+    const ticketId = crypto.randomUUID();
+
+    const ticket = {
+      id: ticketId,
+      ...ticketData,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    await kv.set(`ticket:${user.id}:${ticketId}`, ticket);
+    return c.json({ success: true, ticket });
+  } catch (error) {
+    console.error('Add ticket error:', error);
+    return c.json({ error: 'Failed to create ticket' }, 500);
+  }
+});
+
+// ========== COMMUNITY PLATFORM ENDPOINTS ==========
+app.get("/make-server-50d6a062/community/posts", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const posts = await kv.getByPrefix(`community-post:`);
+    return c.json({ posts: posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) });
+  } catch (error) {
+    console.error('Get community posts error:', error);
+    return c.json({ error: 'Failed to fetch posts' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/community/posts", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const postData = await c.req.json();
+    const postId = crypto.randomUUID();
+
+    const userData = await kv.get(`user:${user.id}`);
+
+    const post = {
+      id: postId,
+      author: postData.isAnonymous ? "Anonymous" : (userData?.name || "User"),
+      authorInitials: postData.isAnonymous ? "A" : (userData?.name?.[0] || "U"),
+      ...postData,
+      likes: 0,
+      comments: 0,
+      createdAt: new Date().toISOString()
+    };
+
+    await kv.set(`community-post:${postId}`, post);
+    return c.json({ success: true, post });
+  } catch (error) {
+    console.error('Create community post error:', error);
+    return c.json({ error: 'Failed to create post' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/community/posts/:id/like", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const postId = c.req.param('id');
+    const post = await kv.get(`community-post:${postId}`);
+    if (!post) return c.json({ error: 'Post not found' }, 404);
+
+    post.likes = (post.likes || 0) + 1;
+    await kv.set(`community-post:${postId}`, post);
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Like post error:', error);
+    return c.json({ error: 'Failed to like post' }, 500);
+  }
+});
+
 Deno.serve(app.fetch);

@@ -154,6 +154,101 @@ export function LabResultsVitals({ accessToken }: { accessToken: string }) {
     fetchData();
   }, []);
 
+  // Trend Badge Component
+  const TrendBadge = ({
+    direction,
+    percentChange,
+    inverse = false,
+  }: {
+    direction: "up" | "down" | "stable";
+    percentChange: number;
+    inverse?: boolean;
+  }) => {
+    const Icon = direction === "up" ? TrendingUp : direction === "down" ? TrendingDown : Minus;
+    const isGood = inverse
+      ? direction === "down" || direction === "stable"
+      : direction === "up" || direction === "stable";
+    const colorClass = isGood
+      ? "text-green-600 bg-green-50"
+      : "text-red-600 bg-red-50";
+    const stableClass = "text-gray-600 bg-gray-50";
+
+    return (
+      <div
+        className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${
+          direction === "stable" ? stableClass : colorClass
+        }`}
+      >
+        <Icon className="h-3 w-3" />
+        <span>
+          {direction === "stable" ? "Stable" : `${Math.abs(percentChange)}%`}
+        </span>
+      </div>
+    );
+  };
+
+  // Calculate trend for a specific vital type
+  const calculateVitalTrend = (vitalType: string, periodDays: number = 7) => {
+    const filteredVitals = vitals
+      .filter((v) => v.type === vitalType)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    if (filteredVitals.length < 2) {
+      return null;
+    }
+
+    const now = new Date();
+    const periodStart = new Date(now.getTime() - periodDays * 24 * 60 * 60 * 1000);
+    const previousPeriodStart = new Date(
+      now.getTime() - periodDays * 2 * 24 * 60 * 60 * 1000
+    );
+
+    const currentPeriod = filteredVitals.filter(
+      (v) => new Date(v.date) >= periodStart && new Date(v.date) <= now
+    );
+    const previousPeriod = filteredVitals.filter(
+      (v) =>
+        new Date(v.date) >= previousPeriodStart &&
+        new Date(v.date) < periodStart
+    );
+
+    if (currentPeriod.length === 0 || previousPeriod.length === 0) {
+      return null;
+    }
+
+    const currentAvg =
+      currentPeriod.reduce((sum, v) => sum + v.value, 0) / currentPeriod.length;
+    const previousAvg =
+      previousPeriod.reduce((sum, v) => sum + v.value, 0) / previousPeriod.length;
+
+    const change = currentAvg - previousAvg;
+    const percentChange = previousAvg !== 0 ? (change / previousAvg) * 100 : 0;
+
+    let direction: "up" | "down" | "stable";
+    if (Math.abs(percentChange) < 5) {
+      direction = "stable";
+    } else if (change > 0) {
+      direction = "up";
+    } else {
+      direction = "down";
+    }
+
+    return {
+      direction,
+      percentChange: Math.round(Math.abs(percentChange)),
+      currentAvg: Math.round(currentAvg * 10) / 10,
+      previousAvg: Math.round(previousAvg * 10) / 10,
+    };
+  };
+
+  // Get latest vital value
+  const getLatestVital = (vitalType: string) => {
+    const filtered = vitals
+      .filter((v) => v.type === vitalType)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return filtered[0] || null;
+  };
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -340,6 +435,57 @@ export function LabResultsVitals({ accessToken }: { accessToken: string }) {
     );
   };
 
+  // Get previous lab result for comparison
+  const getPreviousLabResult = (currentLab: LabResult, resultName: string) => {
+    const previousLabs = labResults
+      .filter(
+        (lab) =>
+          lab.testName === currentLab.testName &&
+          lab.id !== currentLab.id &&
+          new Date(lab.date) < new Date(currentLab.date) &&
+          lab.status === "completed"
+      )
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    if (previousLabs.length === 0) return null;
+
+    const previousResult = previousLabs[0].results.find((r) => r.name === resultName);
+    return previousResult || null;
+  };
+
+  // Calculate trend for lab result value
+  const calculateLabResultTrend = (
+    currentValue: string,
+    previousValue: string,
+    flag: string
+  ) => {
+    const current = parseFloat(currentValue);
+    const previous = parseFloat(previousValue);
+
+    if (isNaN(current) || isNaN(previous)) return null;
+
+    const change = current - previous;
+    const percentChange = previous !== 0 ? Math.abs((change / previous) * 100) : 0;
+
+    let direction: "up" | "down" | "stable";
+    if (Math.abs(percentChange) < 3) {
+      direction = "stable";
+    } else if (change > 0) {
+      direction = "up";
+    } else {
+      direction = "down";
+    }
+
+    // Determine if this is an inverse metric (lower is better)
+    const isInverse = flag === "high" || flag === "critical";
+
+    return {
+      direction,
+      percentChange: Math.round(percentChange),
+      isInverse,
+    };
+  };
+
   if (loading) {
     return (
       <div className="p-6">
@@ -500,6 +646,55 @@ export function LabResultsVitals({ accessToken }: { accessToken: string }) {
             </Dialog>
           </div>
 
+          {/* Summary Stats Cards */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {VITAL_TYPES.slice(0, 4).map((vitalType) => {
+              const latest = getLatestVital(vitalType.value);
+              const trend = calculateVitalTrend(vitalType.value);
+              const isInverse =
+                vitalType.value === "blood_pressure_systolic" ||
+                vitalType.value === "blood_pressure_diastolic" ||
+                vitalType.value === "glucose" ||
+                vitalType.value === "weight";
+
+              return (
+                <Card key={vitalType.value}>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                      {vitalType.label}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {latest ? (
+                      <div className="space-y-2">
+                        <div className="text-2xl font-bold">
+                          {latest.value} {vitalType.unit}
+                        </div>
+                        {trend && (
+                          <div className="flex items-center gap-2">
+                            <TrendBadge
+                              direction={trend.direction}
+                              percentChange={trend.percentChange}
+                              inverse={isInverse}
+                            />
+                            <span className="text-xs text-muted-foreground">
+                              vs last week
+                            </span>
+                          </div>
+                        )}
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(latest.date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">No data</p>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
           <Card>
             <CardHeader>
               <CardTitle>
@@ -538,32 +733,73 @@ export function LabResultsVitals({ accessToken }: { accessToken: string }) {
               .filter((v) => v.type === selectedVitalType)
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
               .slice(0, 6)
-              .map((vital) => (
-                <Card key={vital.id}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-medium">
-                        {new Date(vital.date).toLocaleDateString()}
-                      </CardTitle>
-                      <Activity className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {vital.value} {vital.unit}
-                    </div>
-                    {vital.time && (
-                      <p className="text-xs text-muted-foreground mt-1">{vital.time}</p>
-                    )}
-                    {vital.notes && (
-                      <p className="text-sm text-muted-foreground mt-2">{vital.notes}</p>
-                    )}
-                    <p className="text-xs text-muted-foreground mt-2">
-                      By: {vital.recordedBy}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+              .map((vital, index, array) => {
+                const previousVital = array[index + 1];
+                const isInverse =
+                  vital.type === "blood_pressure_systolic" ||
+                  vital.type === "blood_pressure_diastolic" ||
+                  vital.type === "glucose" ||
+                  vital.type === "weight";
+
+                let trendInfo = null;
+                if (previousVital) {
+                  const change = vital.value - previousVital.value;
+                  const percentChange =
+                    previousVital.value !== 0
+                      ? Math.abs((change / previousVital.value) * 100)
+                      : 0;
+
+                  let direction: "up" | "down" | "stable";
+                  if (Math.abs(percentChange) < 3) {
+                    direction = "stable";
+                  } else if (change > 0) {
+                    direction = "up";
+                  } else {
+                    direction = "down";
+                  }
+
+                  trendInfo = {
+                    direction,
+                    percentChange: Math.round(percentChange),
+                  };
+                }
+
+                return (
+                  <Card key={vital.id}>
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-sm font-medium">
+                          {new Date(vital.date).toLocaleDateString()}
+                        </CardTitle>
+                        <Activity className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-end justify-between">
+                        <div className="text-2xl font-bold">
+                          {vital.value} {vital.unit}
+                        </div>
+                        {trendInfo && (
+                          <TrendBadge
+                            direction={trendInfo.direction}
+                            percentChange={trendInfo.percentChange}
+                            inverse={isInverse}
+                          />
+                        )}
+                      </div>
+                      {vital.time && (
+                        <p className="text-xs text-muted-foreground mt-1">{vital.time}</p>
+                      )}
+                      {vital.notes && (
+                        <p className="text-sm text-muted-foreground mt-2">{vital.notes}</p>
+                      )}
+                      <p className="text-xs text-muted-foreground mt-2">
+                        By: {vital.recordedBy}
+                      </p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
           </div>
         </TabsContent>
 
@@ -856,28 +1092,53 @@ export function LabResultsVitals({ accessToken }: { accessToken: string }) {
                       <div>
                         <h4 className="font-semibold mb-2">Results:</h4>
                         <div className="space-y-2">
-                          {lab.results.map((result, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-center justify-between p-3 border rounded-lg"
-                            >
-                              <div className="flex items-center gap-2">
-                                {getFlagIcon(result.flag)}
-                                <div>
-                                  <div className="font-medium">{result.name}</div>
-                                  <div className="text-sm text-muted-foreground">
-                                    Reference: {result.referenceRange}
+                          {lab.results.map((result, idx) => {
+                            const previousResult = getPreviousLabResult(lab, result.name);
+                            const trendInfo = previousResult
+                              ? calculateLabResultTrend(
+                                  result.value,
+                                  previousResult.value,
+                                  result.flag
+                                )
+                              : null;
+
+                            return (
+                              <div
+                                key={idx}
+                                className="flex items-center justify-between p-3 border rounded-lg"
+                              >
+                                <div className="flex items-center gap-2">
+                                  {getFlagIcon(result.flag)}
+                                  <div>
+                                    <div className="font-medium">{result.name}</div>
+                                    <div className="text-sm text-muted-foreground">
+                                      Reference: {result.referenceRange}
+                                    </div>
+                                    {previousResult && (
+                                      <div className="text-xs text-muted-foreground mt-1">
+                                        Previous: {previousResult.value} {previousResult.unit}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="text-right flex flex-col items-end gap-1">
+                                  <div className="font-semibold">
+                                    {result.value} {result.unit}
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                    {getFlagBadge(result.flag)}
+                                    {trendInfo && (
+                                      <TrendBadge
+                                        direction={trendInfo.direction}
+                                        percentChange={trendInfo.percentChange}
+                                        inverse={trendInfo.isInverse}
+                                      />
+                                    )}
                                   </div>
                                 </div>
                               </div>
-                              <div className="text-right">
-                                <div className="font-semibold">
-                                  {result.value} {result.unit}
-                                </div>
-                                {getFlagBadge(result.flag)}
-                              </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}
