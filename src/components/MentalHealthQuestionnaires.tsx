@@ -38,6 +38,9 @@ import {
   Shield,
   Zap,
   User,
+  Users,
+  Baby,
+  CircleSlash,
 } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -771,6 +774,579 @@ const YBOCS_QUESTIONS: Question[] = [
   },
 ];
 
+// CES-D: Center for Epidemiologic Studies Depression Scale
+const CESD_QUESTIONS: Question[] = [
+  {
+    id: "cesd_1",
+    text: "I was bothered by things that usually don't bother me",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_2",
+    text: "I did not feel like eating; my appetite was poor",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_3",
+    text: "I felt that I could not shake off the blues even with help from my family or friends",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_4",
+    text: "I felt I was just as good as other people",
+    options: [
+      { value: 3, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 2, label: "Some or a little of the time (1-2 days)" },
+      { value: 1, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 0, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_5",
+    text: "I had trouble keeping my mind on what I was doing",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_6",
+    text: "I felt depressed",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_7",
+    text: "I felt that everything I did was an effort",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_8",
+    text: "I felt hopeful about the future",
+    options: [
+      { value: 3, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 2, label: "Some or a little of the time (1-2 days)" },
+      { value: 1, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 0, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_9",
+    text: "I thought my life had been a failure",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_10",
+    text: "I felt fearful",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_11",
+    text: "My sleep was restless",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_12",
+    text: "I was happy",
+    options: [
+      { value: 3, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 2, label: "Some or a little of the time (1-2 days)" },
+      { value: 1, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 0, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_13",
+    text: "I talked less than usual",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_14",
+    text: "I felt lonely",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_15",
+    text: "People were unfriendly",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_16",
+    text: "I enjoyed life",
+    options: [
+      { value: 3, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 2, label: "Some or a little of the time (1-2 days)" },
+      { value: 1, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 0, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_17",
+    text: "I had crying spells",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_18",
+    text: "I felt sad",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_19",
+    text: "I felt that people disliked me",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+  {
+    id: "cesd_20",
+    text: "I could not get going",
+    options: [
+      { value: 0, label: "Rarely or none of the time (less than 1 day)" },
+      { value: 1, label: "Some or a little of the time (1-2 days)" },
+      { value: 2, label: "Occasionally or a moderate amount of time (3-4 days)" },
+      { value: 3, label: "Most or all of the time (5-7 days)" },
+    ],
+  },
+];
+
+// GDS-15: Geriatric Depression Scale (15-item short form)
+const GDS15_QUESTIONS: Question[] = [
+  {
+    id: "gds15_1",
+    text: "Are you basically satisfied with your life?",
+    options: [
+      { value: 0, label: "Yes" },
+      { value: 1, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_2",
+    text: "Have you dropped many of your activities and interests?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_3",
+    text: "Do you feel that your life is empty?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_4",
+    text: "Do you often get bored?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_5",
+    text: "Are you in good spirits most of the time?",
+    options: [
+      { value: 0, label: "Yes" },
+      { value: 1, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_6",
+    text: "Are you afraid that something bad is going to happen to you?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_7",
+    text: "Do you feel happy most of the time?",
+    options: [
+      { value: 0, label: "Yes" },
+      { value: 1, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_8",
+    text: "Do you often feel helpless?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_9",
+    text: "Do you prefer to stay at home, rather than going out and doing new things?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_10",
+    text: "Do you feel you have more problems with memory than most?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_11",
+    text: "Do you think it is wonderful to be alive now?",
+    options: [
+      { value: 0, label: "Yes" },
+      { value: 1, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_12",
+    text: "Do you feel pretty worthless the way you are now?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_13",
+    text: "Do you feel full of energy?",
+    options: [
+      { value: 0, label: "Yes" },
+      { value: 1, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_14",
+    text: "Do you feel that your situation is hopeless?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+  {
+    id: "gds15_15",
+    text: "Do you think that most people are better off than you are?",
+    options: [
+      { value: 1, label: "Yes" },
+      { value: 0, label: "No" },
+    ],
+  },
+];
+
+// C-SSRS: Columbia-Suicide Severity Rating Scale (Screening Version)
+const CSSRS_QUESTIONS: Question[] = [
+  {
+    id: "cssrs_1",
+    text: "Have you wished you were dead or wished you could go to sleep and not wake up?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "cssrs_2",
+    text: "Have you actually had any thoughts of killing yourself?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "cssrs_3",
+    text: "Have you been thinking about how you might do this?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "cssrs_4",
+    text: "Have you had these thoughts and had some intention of acting on them?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "cssrs_5",
+    text: "Have you started to work out or worked out the details of how to kill yourself? Do you intend to carry out this plan?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "cssrs_6",
+    text: "Have you ever done anything, started to do anything, or prepared to do anything to end your life?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+];
+
+// CAGE: Substance Use Screening
+const CAGE_QUESTIONS: Question[] = [
+  {
+    id: "cage_1",
+    text: "Have you ever felt you should Cut down on your drinking?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "cage_2",
+    text: "Have people Annoyed you by criticizing your drinking?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "cage_3",
+    text: "Have you ever felt bad or Guilty about your drinking?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+  {
+    id: "cage_4",
+    text: "Have you ever had a drink first thing in the morning to steady your nerves or to get rid of a hangover (Eye-opener)?",
+    options: [
+      { value: 0, label: "No" },
+      { value: 1, label: "Yes" },
+    ],
+  },
+];
+
+// PSC-17: Pediatric Symptom Checklist
+const PSC17_QUESTIONS: Question[] = [
+  {
+    id: "psc17_1",
+    text: "Complains of aches or pains",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_2",
+    text: "Spends more time alone",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_3",
+    text: "Tires easily, little energy",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_4",
+    text: "Fidgety, unable to sit still",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_5",
+    text: "Has trouble with a teacher",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_6",
+    text: "Less interested in school",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_7",
+    text: "Acts as if driven by a motor",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_8",
+    text: "Daydreams too much",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_9",
+    text: "Distracted easily",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_10",
+    text: "Is afraid of new situations",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_11",
+    text: "Feels sad, unhappy",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_12",
+    text: "Is irritable, angry",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_13",
+    text: "Feels hopeless",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_14",
+    text: "Has trouble concentrating",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_15",
+    text: "Less interested in friends",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_16",
+    text: "Fights with other children",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+  {
+    id: "psc17_17",
+    text: "Absent from school",
+    options: [
+      { value: 0, label: "Never" },
+      { value: 1, label: "Sometimes" },
+      { value: 2, label: "Often" },
+    ],
+  },
+];
+
 const QUESTIONNAIRES: Questionnaire[] = [
   {
     id: "phq9",
@@ -993,6 +1569,171 @@ const QUESTIONNAIRES: Questionnaire[] = [
       ],
     },
     icon: Brain,
+  },
+  {
+    id: "cesd",
+    name: "Center for Epidemiologic Studies Depression Scale",
+    acronym: "CES-D",
+    description: "Depression screening (20 items)",
+    type: "depression",
+    questions: CESD_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 60,
+      ranges: [
+        {
+          label: "Minimal",
+          min: 0,
+          max: 15,
+          interpretation: "Minimal depressive symptoms. No clinical intervention needed.",
+        },
+        {
+          label: "Mild",
+          min: 16,
+          max: 20,
+          interpretation: "Mild depression. Monitor symptoms and consider support.",
+        },
+        {
+          label: "Moderate",
+          min: 21,
+          max: 30,
+          interpretation: "Moderate depression. Clinical evaluation recommended.",
+        },
+        {
+          label: "Severe",
+          min: 31,
+          max: 60,
+          interpretation: "Severe depression. Immediate clinical intervention recommended.",
+        },
+      ],
+    },
+    icon: Brain,
+  },
+  {
+    id: "gds15",
+    name: "Geriatric Depression Scale",
+    acronym: "GDS-15",
+    description: "Depression screening for older adults (ages 65+)",
+    type: "depression",
+    questions: GDS15_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 15,
+      ranges: [
+        {
+          label: "Normal",
+          min: 0,
+          max: 4,
+          interpretation: "Normal. No depression detected.",
+        },
+        {
+          label: "Mild",
+          min: 5,
+          max: 8,
+          interpretation: "Mild depression. Follow-up recommended.",
+        },
+        {
+          label: "Moderate to Severe",
+          min: 9,
+          max: 15,
+          interpretation: "Moderate to severe depression. Clinical evaluation and treatment recommended.",
+        },
+      ],
+    },
+    icon: Users,
+  },
+  {
+    id: "cssrs",
+    name: "Columbia-Suicide Severity Rating Scale",
+    acronym: "C-SSRS",
+    description: "Suicide risk assessment (screening version)",
+    type: "suicide_risk",
+    questions: CSSRS_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 6,
+      ranges: [
+        {
+          label: "No Risk",
+          min: 0,
+          max: 0,
+          interpretation: "No suicidal ideation detected. Continue monitoring.",
+        },
+        {
+          label: "Low Risk",
+          min: 1,
+          max: 1,
+          interpretation: "Passive suicidal ideation. Closer monitoring and support recommended.",
+        },
+        {
+          label: "Moderate Risk",
+          min: 2,
+          max: 3,
+          interpretation: "Active suicidal ideation. Clinical evaluation needed.",
+        },
+        {
+          label: "High Risk",
+          min: 4,
+          max: 6,
+          interpretation: "IMMEDIATE DANGER. Suicidal intent or plan present. Emergency intervention required.",
+        },
+      ],
+    },
+    icon: AlertCircle,
+  },
+  {
+    id: "cage",
+    name: "CAGE Substance Use Screening",
+    acronym: "CAGE",
+    description: "Alcohol use disorder screening",
+    type: "substance_use",
+    questions: CAGE_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 4,
+      ranges: [
+        {
+          label: "Low Risk",
+          min: 0,
+          max: 1,
+          interpretation: "Low risk for alcohol use disorder.",
+        },
+        {
+          label: "High Risk",
+          min: 2,
+          max: 4,
+          interpretation: "High risk for alcohol use disorder. Further evaluation recommended.",
+        },
+      ],
+    },
+    icon: CircleSlash,
+  },
+  {
+    id: "psc17",
+    name: "Pediatric Symptom Checklist-17",
+    acronym: "PSC-17",
+    description: "Mental health screening for children (ages 4-16)",
+    type: "pediatric",
+    questions: PSC17_QUESTIONS,
+    scoring: {
+      min: 0,
+      max: 34,
+      ranges: [
+        {
+          label: "Low Risk",
+          min: 0,
+          max: 14,
+          interpretation: "Low risk. No significant concerns detected.",
+        },
+        {
+          label: "At Risk",
+          min: 15,
+          max: 34,
+          interpretation: "At risk for psychosocial impairment. Further evaluation recommended.",
+        },
+      ],
+    },
+    icon: Baby,
   },
 ];
 
