@@ -43,33 +43,52 @@ HealthCompanion is a full-featured healthcare portal supporting both patient and
   - Hormonal tracking for men and women (including period tracking)
   - Cross-cutting: pain scale, fatigue, sleep quality, stress, mood, triggers
 
-- **Mental Health Questionnaires** (16 Evidence-Based Assessments):
+- **Mental Health Questionnaires** (23 Evidence-Based Assessments):
 
-  **Depression Screening:**
+  **Depression Screening (4 tools):**
   - PHQ-9 (Patient Health Questionnaire-9) - 9 items
   - CES-D (Center for Epidemiologic Studies Depression Scale) - 20 items
   - GDS-15 (Geriatric Depression Scale) - 15 items for older adults (65+)
+  - EPDS (Edinburgh Postnatal Depression Scale) - 10 items for perinatal depression
 
-  **Anxiety Disorders:**
-  - GAD-7 (Generalized Anxiety Disorder-7) - 7 items
+  **Anxiety Disorders (7 tools):**
+  - GAD-7 (Generalized Anxiety Disorder-7) - 7 items for generalized anxiety
   - SPIN (Social Phobia Inventory) - 17 items for social anxiety
+  - PSWQ (Penn State Worry Questionnaire) - 8 items for pathological worry
+  - PDSS (Panic Disorder Severity Scale) - 5 items for panic attacks
+  - PCL-5 (PTSD Checklist for DSM-5) - 20 items for trauma/PTSD
+  - SCAS (Spence Children's Anxiety Scale) - 10 items for ages 6-18 (parent report)
 
-  **Trauma & OCD:**
-  - PCL-5 (PTSD Checklist for DSM-5) - 20 items
+  **OCD (2 tools):**
   - Y-BOCS (Yale-Brown Obsessive Compulsive Scale) - 10 items
+  - OCI-R (Obsessive Compulsive Inventory-Revised) - 6 items
 
-  **Other Mental Health:**
+  **Other Mental Health (5 tools):**
   - ASRS-v1.1 (Adult ADHD Self-Report Scale) - 6 items
   - PSS-10 (Perceived Stress Scale) - 10 items
   - MDQ (Mood Disorder Questionnaire) - 13 items for bipolar screening
-  - BSL-23 (Borderline Symptom List) - 5 items for personality disorder symptoms
+  - BSL-23 (Borderline Symptom List) - 5 items for personality disorder
+  - CAS (Clinical Anger Scale) - 5 items for anger assessment
 
-  **Specialized Assessments:**
+  **Specialized Assessments (5 tools):**
   - C-SSRS (Columbia-Suicide Severity Rating Scale) - 6 items with emergency flagging
   - CAGE (Substance Use Screening) - 4 items for alcohol use disorder
-  - PSC-17 (Pediatric Symptom Checklist) - 17 items for ages 4-16
   - EAT-26 (Eating Attitudes Test) - 7 items for eating disorders
   - ISI (Insomnia Severity Index) - 7 items for sleep disorders
+  - PSC-17 (Pediatric Symptom Checklist) - 17 items for ages 4-16
+
+  **Child/Adolescent Specific (3 tools):**
+  - SCAS (Spence Children's Anxiety) - Ages 6-18
+  - SDQ (Strengths & Difficulties Questionnaire) - Ages 3-16, comprehensive behavioral/emotional screening
+  - PSC-17 (Pediatric Symptom Checklist) - Ages 4-16
+
+  **Age Coverage:**
+  - Preschool/Early Childhood (3-5): SDQ
+  - Elementary (6-12): SCAS, SDQ, PSC-17
+  - Adolescent (13-17): All child tools + adult versions
+  - Adults (18-64): 18 adult assessments
+  - Older Adults (65+): GDS-15 + adult tools
+  - Perinatal: EPDS
 
   Each questionnaire includes:
   - Automatic score calculation
@@ -102,7 +121,7 @@ HealthCompanion is a full-featured healthcare portal supporting both patient and
   - Select specific questionnaires for each patient
   - Manage assignments through dedicated UI
   - Patients only see assigned questionnaires
-  - Visual assignment tracking (X of 16 assigned)
+  - Visual assignment tracking (X of 23 assigned)
   - Real-time sync and updates
 
 #### Communication
@@ -252,7 +271,15 @@ build/                   # Production build output
 - Inclusive language throughout
 
 ### Mental Health Focus
-- 16 evidence-based screening tools
+- **23 evidence-based screening tools** covering all age groups (3+ through older adults)
+- **Comprehensive age coverage:**
+  - Preschool (3-5): SDQ behavioral/emotional screening
+  - Elementary (6-12): SCAS anxiety, SDQ, PSC-17
+  - Adolescent (13-17): Child tools + adult assessments
+  - Adults: 18 specialized assessments
+  - Older adults (65+): GDS-15 + adult tools
+  - Perinatal: EPDS postnatal depression screening
+- **Assessment categories:** Depression (4), Anxiety/PTSD (7), OCD (2), ADHD, Stress, Bipolar, Borderline, Anger, Suicide risk, Substance use, Eating disorders, Sleep disorders
 - Comprehensive symptom tracking covering depression, anxiety, PTSD, EDS, migraines, hormonal changes
 - Provider-managed assessment assignments
 - Automated scoring and clinical interpretation
