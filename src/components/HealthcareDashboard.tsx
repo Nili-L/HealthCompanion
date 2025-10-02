@@ -3,15 +3,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { 
-  User, 
-  FileText, 
-  Scan, 
-  Pill, 
-  Activity, 
-  Calendar, 
-  BarChart3, 
-  Upload, 
-  MessageSquare, 
+  User,
+  FileText,
+  Scan,
+  Pill,
+  Activity,
+  Calendar,
+  BarChart3,
+  Upload,
+  MessageSquare,
   Search,
   Settings,
   HelpCircle,
@@ -27,7 +27,8 @@ import {
   ArrowLeft,
   Plus,
   Edit,
-  Trash2
+  Trash2,
+  Brain
 } from "lucide-react";
 import { projectId, publicAnonKey } from "../utils/supabase/info";
 import { PatientProfile } from "./PatientProfile";
@@ -41,6 +42,7 @@ import { SecureMessages } from "./SecureMessages";
 import { CareTeam } from "./CareTeam";
 import { InsuranceBilling } from "./InsuranceBilling";
 import { HealthGoals } from "./HealthGoals";
+import { MentalHealthQuestionnaires } from "./MentalHealthQuestionnaires";
 
 interface ModuleDetailViewProps {
   moduleTitle: string;
@@ -92,6 +94,10 @@ function ModuleDetailView({ moduleTitle, role, accessToken }: ModuleDetailViewPr
 
   if (moduleTitle === "Health Goals") {
     return <HealthGoals accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Mental Health Questionnaires") {
+    return <MentalHealthQuestionnaires accessToken={accessToken} />;
   }
 
   // Default view for modules without custom components yet
@@ -334,6 +340,13 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       icon: <Heart className="h-4 w-4" />,
       status: "active" as const,
       count: 3,
+      isNew: true
+    },
+    {
+      title: "Mental Health Questionnaires",
+      description: "PHQ-9, GAD-7, PCL-5, ASRS, PSS-10, Y-BOCS assessments",
+      icon: <Brain className="h-4 w-4" />,
+      status: "active" as const,
       isNew: true
     },
     {

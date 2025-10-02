@@ -1667,4 +1667,49 @@ app.delete("/make-server-50d6a062/goals/:id", async (c) => {
   }
 });
 
+// ===== MENTAL HEALTH QUESTIONNAIRES ENDPOINTS =====
+
+app.get("/make-server-50d6a062/questionnaires", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const questionnaires = await kv.getByPrefix(`questionnaire:${user.id}:`);
+    return c.json(questionnaires || []);
+  } catch (error) {
+    console.error('Get questionnaires error:', error);
+    return c.json({ error: 'Failed to fetch questionnaires' }, 500);
+  }
+});
+
+app.post("/make-server-50d6a062/questionnaires", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const questionnaireData = await c.req.json();
+    const questionnaireId = crypto.randomUUID();
+
+    const questionnaire = {
+      id: questionnaireId,
+      ...questionnaireData,
+      createdAt: new Date().toISOString()
+    };
+
+    await kv.set(`questionnaire:${user.id}:${questionnaireId}`, questionnaire);
+    return c.json({ success: true, questionnaire });
+  } catch (error) {
+    console.error('Add questionnaire error:', error);
+    return c.json({ error: 'Failed to add questionnaire' }, 500);
+  }
+});
+
 Deno.serve(app.fetch);
