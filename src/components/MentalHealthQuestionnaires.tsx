@@ -30,6 +30,8 @@ import {
   Plus,
   FileText,
   TrendingUp,
+  TrendingDown,
+  Minus,
   AlertCircle,
   CheckCircle2,
   Calendar,
@@ -3349,6 +3351,41 @@ export function MentalHealthQuestionnaires({
 
   const projectId = "cvsxfzllhhhpdyckdmqg";
 
+  // Trend Badge Component
+  const TrendBadge = ({
+    direction,
+    percentChange,
+  }: {
+    direction: 'up' | 'down' | 'stable';
+    percentChange: number;
+  }) => {
+    // For mental health scores, lower is better (inverse logic)
+    const isGood = direction === 'down' || direction === 'stable';
+
+    const Icon = direction === 'up' ? TrendingUp : direction === 'down' ? TrendingDown : Minus;
+    const color = direction === 'stable'
+      ? 'text-gray-500'
+      : isGood
+        ? 'text-green-600'
+        : 'text-red-600';
+
+    if (direction === 'stable') {
+      return (
+        <div className="flex items-center gap-1 text-xs text-gray-500">
+          <Minus className="h-3 w-3" />
+          <span>Stable</span>
+        </div>
+      );
+    }
+
+    return (
+      <div className={`flex items-center gap-1 text-xs font-medium ${color}`}>
+        <Icon className="h-3 w-3" />
+        <span>{Math.abs(percentChange).toFixed(0)}% {direction === 'down' ? 'better' : 'worse'}</span>
+      </div>
+    );
+  };
+
   useEffect(() => {
     fetchResponses();
     if (role === 'patient') {
@@ -3513,6 +3550,36 @@ export function MentalHealthQuestionnaires({
     return selectedQuestionnaire.questions.every((q) => isQuestionAnswered(q.id));
   };
 
+  // Trend analysis functions
+  const getQuestionnaireHistory = (questionnaireType: string) => {
+    return responses
+      .filter(r => r.questionnaireType === questionnaireType)
+      .sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime());
+  };
+
+  const calculateScoreTrend = (questionnaireType: string) => {
+    const history = getQuestionnaireHistory(questionnaireType);
+    if (history.length < 2) {
+      return { direction: 'stable' as const, percentChange: 0, latest: history[0]?.totalScore || 0, previous: 0 };
+    }
+
+    const latest = history[0].totalScore;
+    const previous = history[1].totalScore;
+    const change = latest - previous;
+    const percentChange = previous > 0 ? (change / previous) * 100 : 0;
+
+    let direction: 'up' | 'down' | 'stable' = 'stable';
+    if (Math.abs(percentChange) < 5) {
+      direction = 'stable';
+    } else if (change > 0) {
+      direction = 'up';  // Higher score = worsening symptoms
+    } else {
+      direction = 'down'; // Lower score = improving symptoms
+    }
+
+    return { direction, percentChange, latest, previous };
+  };
+
   const getProgressPercentage = () => {
     if (!selectedQuestionnaire) return 0;
     const answered = selectedQuestionnaire.questions.filter((q) =>
@@ -3632,6 +3699,10 @@ export function MentalHealthQuestionnaires({
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredQuestionnaires.map((questionnaire) => {
               const Icon = questionnaire.icon;
+              const trend = calculateScoreTrend(questionnaire.type);
+              const history = getQuestionnaireHistory(questionnaire.type);
+              const hasHistory = history.length > 0;
+
               return (
                 <Card key={questionnaire.id} className="hover:shadow-md transition-shadow">
                   <CardHeader>
@@ -3640,10 +3711,22 @@ export function MentalHealthQuestionnaires({
                         <Icon className="h-5 w-5 text-blue-600" />
                       </div>
                       <div className="flex-1">
-                        <CardTitle className="text-lg">{questionnaire.acronym}</CardTitle>
-                        <CardDescription className="mt-1">
-                          {questionnaire.name}
-                        </CardDescription>
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <CardTitle className="text-lg">{questionnaire.acronym}</CardTitle>
+                            <CardDescription className="mt-1">
+                              {questionnaire.name}
+                            </CardDescription>
+                          </div>
+                          {hasHistory && (
+                            <div className="text-right">
+                              <div className="text-2xl font-bold text-gray-900">{trend.latest}</div>
+                              {history.length >= 2 && (
+                                <TrendBadge direction={trend.direction} percentChange={trend.percentChange} />
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </CardHeader>
@@ -3651,6 +3734,12 @@ export function MentalHealthQuestionnaires({
                     <p className="text-sm text-muted-foreground mb-4">
                       {questionnaire.description}
                     </p>
+                    {hasHistory && (
+                      <div className="mb-4 p-2 bg-gray-50 rounded text-xs text-gray-600">
+                        Last completed: {new Date(history[0].completedAt).toLocaleDateString()} •
+                        <span className="font-medium"> {history[0].severity}</span>
+                      </div>
+                    )}
                     <div className="flex items-center justify-between">
                       <Badge variant="outline">
                         {questionnaire.questions.length} questions
@@ -3659,7 +3748,7 @@ export function MentalHealthQuestionnaires({
                         size="sm"
                         onClick={() => startQuestionnaire(questionnaire)}
                       >
-                        Start
+                        {hasHistory ? 'Retake' : 'Start'}
                       </Button>
                     </div>
                   </CardContent>
@@ -3683,38 +3772,84 @@ export function MentalHealthQuestionnaires({
                   new Date(b.completedAt).getTime() -
                   new Date(a.completedAt).getTime()
               )
-              .map((response) => (
-                <Card key={response.id}>
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle>{response.questionnaireName}</CardTitle>
-                        <CardDescription>
-                          Completed {new Date(response.completedAt).toLocaleString()}
-                        </CardDescription>
+              .map((response, index, array) => {
+                // Find previous assessment of same type
+                const previousResponse = array.slice(index + 1).find(r => r.questionnaireType === response.questionnaireType);
+                const scoreChange = previousResponse ? response.totalScore - previousResponse.totalScore : null;
+                const percentChange = previousResponse && previousResponse.totalScore > 0
+                  ? ((response.totalScore - previousResponse.totalScore) / previousResponse.totalScore) * 100
+                  : null;
+
+                return (
+                  <Card key={response.id}>
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle>{response.questionnaireName}</CardTitle>
+                          <CardDescription>
+                            Completed {new Date(response.completedAt).toLocaleString()}
+                          </CardDescription>
+                        </div>
+                        <div className="flex flex-col items-end gap-2">
+                          <Badge className={getSeverityColor(response.severity)}>
+                            {response.severity}
+                          </Badge>
+                          {scoreChange !== null && Math.abs(scoreChange) > 0 && (
+                            <div className={`flex items-center gap-1 text-xs font-medium ${
+                              scoreChange < 0 ? 'text-green-600' : scoreChange > 0 ? 'text-red-600' : 'text-gray-500'
+                            }`}>
+                              {scoreChange < 0 ? (
+                                <TrendingDown className="h-3 w-3" />
+                              ) : (
+                                <TrendingUp className="h-3 w-3" />
+                              )}
+                              <span>
+                                {scoreChange > 0 ? '+' : ''}{scoreChange}
+                                {percentChange && ` (${Math.abs(percentChange).toFixed(0)}%)`}
+                              </span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <Badge className={getSeverityColor(response.severity)}>
-                        {response.severity}
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Score:</span>
-                        <span className="text-2xl font-bold">
-                          {response.totalScore}
-                        </span>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Score:</span>
+                          <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-bold">
+                              {response.totalScore}
+                            </span>
+                            {previousResponse && (
+                              <span className="text-sm text-gray-500">
+                                (prev: {previousResponse.totalScore})
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                          <p className="text-sm text-blue-900">
+                            <strong>Interpretation:</strong> {response.interpretation}
+                          </p>
+                        </div>
+                        {scoreChange !== null && Math.abs(scoreChange) >= 2 && (
+                          <div className={`p-3 rounded-lg ${
+                            scoreChange < 0 ? 'bg-green-50 border border-green-200' : 'bg-amber-50 border border-amber-200'
+                          }`}>
+                            <p className={`text-sm ${scoreChange < 0 ? 'text-green-900' : 'text-amber-900'}`}>
+                              {scoreChange < 0 ? (
+                                <><strong>Progress detected:</strong> Your symptoms have improved by {Math.abs(scoreChange)} points since your last assessment. Keep up the great work!</>
+                              ) : (
+                                <><strong>Change detected:</strong> Your symptoms have increased by {scoreChange} points. Consider discussing this with your provider.</>
+                              )}
+                            </p>
+                          </div>
+                        )}
                       </div>
-                      <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-sm text-blue-900">
-                          <strong>Interpretation:</strong> {response.interpretation}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
+                    </CardContent>
+                  </Card>
+                );
+              })
           )}
         </TabsContent>
       </Tabs>
