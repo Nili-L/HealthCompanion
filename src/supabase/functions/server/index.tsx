@@ -2474,4 +2474,189 @@ app.put("/make-server-50d6a062/safety-planning", async (c) => {
   }
 });
 
+// ===== BODY MAPPING ENDPOINT =====
+
+app.get("/make-server-50d6a062/body-mapping", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const bodyMapping = await kv.get(`body-mapping:${user.id}`);
+    return c.json({ data: bodyMapping || null });
+  } catch (error) {
+    console.error('Get body mapping error:', error);
+    return c.json({ error: 'Failed to fetch body mapping' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/body-mapping", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const bodyMappingData = await c.req.json();
+    await kv.set(`body-mapping:${user.id}`, bodyMappingData);
+    return c.json({ success: true, data: bodyMappingData });
+  } catch (error) {
+    console.error('Update body mapping error:', error);
+    return c.json({ error: 'Failed to update body mapping' }, 500);
+  }
+});
+
+// ===== REPRODUCTIVE HEALTH ENDPOINT =====
+
+app.get("/make-server-50d6a062/reproductive-health", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const reproductiveHealth = await kv.get(`reproductive-health:${user.id}`);
+    return c.json({ data: reproductiveHealth || null });
+  } catch (error) {
+    console.error('Get reproductive health error:', error);
+    return c.json({ error: 'Failed to fetch reproductive health' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/reproductive-health", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const reproductiveHealthData = await c.req.json();
+    await kv.set(`reproductive-health:${user.id}`, reproductiveHealthData);
+    return c.json({ success: true, data: reproductiveHealthData });
+  } catch (error) {
+    console.error('Update reproductive health error:', error);
+    return c.json({ error: 'Failed to update reproductive health' }, 500);
+  }
+});
+
+// ===== SEXUAL HEALTH ENDPOINT =====
+
+app.get("/make-server-50d6a062/sexual-health", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const sexualHealth = await kv.get(`sexual-health:${user.id}`);
+    return c.json({ data: sexualHealth || null });
+  } catch (error) {
+    console.error('Get sexual health error:', error);
+    return c.json({ error: 'Failed to fetch sexual health' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/sexual-health", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const sexualHealthData = await c.req.json();
+    await kv.set(`sexual-health:${user.id}`, sexualHealthData);
+    return c.json({ success: true, data: sexualHealthData });
+  } catch (error) {
+    console.error('Update sexual health error:', error);
+    return c.json({ error: 'Failed to update sexual health' }, 500);
+  }
+});
+
+// ===== MEDICAL ADVOCACY ENDPOINT =====
+
+app.get("/make-server-50d6a062/medical-advocacy", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const medicalAdvocacy = await kv.get(`medical-advocacy:${user.id}`);
+    return c.json({ data: medicalAdvocacy || null });
+  } catch (error) {
+    console.error('Get medical advocacy error:', error);
+    return c.json({ error: 'Failed to fetch medical advocacy' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/medical-advocacy", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const medicalAdvocacyData = await c.req.json();
+    await kv.set(`medical-advocacy:${user.id}`, medicalAdvocacyData);
+    return c.json({ success: true, data: medicalAdvocacyData });
+  } catch (error) {
+    console.error('Update medical advocacy error:', error);
+    return c.json({ error: 'Failed to update medical advocacy' }, 500);
+  }
+});
+
+// ===== ACCESSIBILITY ACCOMMODATIONS ENDPOINT =====
+
+app.get("/make-server-50d6a062/accessibility", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const accessibility = await kv.get(`accessibility:${user.id}`);
+    return c.json({ data: accessibility || null });
+  } catch (error) {
+    console.error('Get accessibility error:', error);
+    return c.json({ error: 'Failed to fetch accessibility' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/accessibility", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const accessibilityData = await c.req.json();
+    await kv.set(`accessibility:${user.id}`, accessibilityData);
+    return c.json({ success: true, data: accessibilityData });
+  } catch (error) {
+    console.error('Update accessibility error:', error);
+    return c.json({ error: 'Failed to update accessibility' }, 500);
+  }
+});
+
 Deno.serve(app.fetch);

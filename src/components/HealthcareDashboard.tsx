@@ -31,7 +31,9 @@ import {
   Brain,
   Image,
   CheckSquare,
-  Shield
+  Shield,
+  Baby,
+  Accessibility
 } from "lucide-react";
 import { projectId, publicAnonKey } from "../utils/supabase/info";
 import { PatientProfile } from "./PatientProfile";
@@ -65,6 +67,11 @@ import { GenderIdentity } from "./GenderIdentity";
 import { ConsentBoundaries } from "./ConsentBoundaries";
 import { TransitionCareTracking } from "./TransitionCareTracking";
 import { SafetyPlanning } from "./SafetyPlanning";
+import { BodyMapping } from "./BodyMapping";
+import { ReproductiveHealth } from "./ReproductiveHealth";
+import { SexualHealth } from "./SexualHealth";
+import { MedicalAdvocacy } from "./MedicalAdvocacy";
+import { AccessibilityAccommodations } from "./AccessibilityAccommodations";
 
 interface ModuleDetailViewProps {
   moduleTitle: string;
@@ -196,6 +203,26 @@ function ModuleDetailView({ moduleTitle, role, accessToken }: ModuleDetailViewPr
 
   if (moduleTitle === "Safety Planning") {
     return <SafetyPlanning accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Body Mapping") {
+    return <BodyMapping accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Reproductive Health") {
+    return <ReproductiveHealth accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Sexual Health") {
+    return <SexualHealth accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Medical Advocacy") {
+    return <MedicalAdvocacy accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Accessibility & Accommodations") {
+    return <AccessibilityAccommodations accessToken={accessToken} />;
   }
 
   // Default view for modules without custom components yet
@@ -371,6 +398,41 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       title: "Safety Planning",
       description: "Crisis resources, safe people, coping strategies, and emergency plans",
       icon: <Shield className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Body Mapping",
+      description: "Track dysphoria, euphoria, and sensations with custom anatomy terms",
+      icon: <User className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Reproductive Health",
+      description: "Gender-neutral fertility, pregnancy, and family planning",
+      icon: <Baby className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Sexual Health",
+      description: "STI testing, PrEP/PEP, and sexual function tracking",
+      icon: <Shield className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Medical Advocacy",
+      description: "Report discrimination and access self-advocacy tools",
+      icon: <Shield className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Accessibility & Accommodations",
+      description: "Neurodiversity, mobility, sensory, and communication needs",
+      icon: <Accessibility className="h-4 w-4" />,
       status: "active" as const,
       isNew: true
     },
