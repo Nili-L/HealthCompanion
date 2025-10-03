@@ -12,6 +12,42 @@ const DEMO_ACCOUNTS = [
   { email: 'provider@demo.com', password: 'demo123', name: 'Dr. Demo Provider', role: 'provider' }
 ];
 
+// Demo patient profile data - EMPTY for user to fill in
+const DEMO_PATIENT_PROFILE = {
+  legalName: "",
+  chosenName: "",
+  otherNames: "",
+  pronouns: "",
+  dateOfBirth: "",
+  genderIdentity: "",
+  sexAssignedAtBirth: "",
+  sexualOrientation: "",
+  bloodType: "",
+  height: "",
+  weight: "",
+  allergies: "",
+  medicalConditions: "",
+  genderAffirmingCare: ""
+};
+
+const DEMO_EMERGENCY_CONTACTS: any[] = [];
+const DEMO_PROVIDERS: any[] = [];
+const DEMO_KUPAT_HOLIM: any[] = [];
+
+// Helper function to initialize demo patient data with empty fields
+async function initializeDemoPatientData(userId: string) {
+  try {
+    // Set empty profile
+    await kv.set(`profile:${userId}`, DEMO_PATIENT_PROFILE);
+
+    console.log(`Demo patient data initialized with empty fields for user ${userId}`);
+    return { success: true };
+  } catch (error) {
+    console.error(`Failed to initialize demo patient data:`, error);
+    return { success: false, error: String(error) };
+  }
+}
+
 // Helper function to ensure demo account exists
 async function ensureDemoAccountExists(email: string, password: string, name: string, role: string) {
   try {
@@ -62,7 +98,12 @@ async function ensureDemoAccountExists(email: string, password: string, name: st
               createdAt: new Date().toISOString()
             });
             await kv.set(`demo:${email}`, { created: true, userId: existingSupabaseUser.id });
-            
+
+            // Initialize demo data for patient accounts
+            if (role === 'patient') {
+              await initializeDemoPatientData(existingSupabaseUser.id);
+            }
+
             console.log(`Demo account synced: ${email}`);
             return { success: true, userId: existingSupabaseUser.id };
           }
@@ -82,7 +123,12 @@ async function ensureDemoAccountExists(email: string, password: string, name: st
       createdAt: new Date().toISOString()
     });
     await kv.set(`demo:${email}`, { created: true, userId: authData.user.id });
-    
+
+    // Initialize demo data for patient accounts
+    if (role === 'patient') {
+      await initializeDemoPatientData(authData.user.id);
+    }
+
     console.log(`Demo account created successfully: ${email}`);
     return { success: true, userId: authData.user.id };
   } catch (error) {
@@ -135,18 +181,24 @@ app.get("/make-server-50d6a062/health", async (c) => {
 app.post("/make-server-50d6a062/init-demo-accounts", async (c) => {
   console.log('Manual demo account initialization requested');
   const results = [];
-  
+
   for (const account of DEMO_ACCOUNTS) {
     const result = await ensureDemoAccountExists(account.email, account.password, account.name, account.role);
+
+    // Reinitialize demo data for patient accounts
+    if (result.success && result.userId && account.role === 'patient') {
+      await initializeDemoPatientData(result.userId);
+    }
+
     results.push({
       email: account.email,
       ...result
     });
   }
-  
-  return c.json({ 
+
+  return c.json({
     success: true,
-    results 
+    results
   });
 });
 

@@ -3,11 +3,15 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 export type ColorBlindMode = 'none' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'achromatopsia';
 export type FontSize = 'small' | 'medium' | 'large' | 'extra-large';
 export type ContrastMode = 'normal' | 'high';
+export type ThemeMode = 'light' | 'dark' | 'system';
+export type Language = 'en' | 'he';
 
 interface AccessibilitySettings {
   colorBlindMode: ColorBlindMode;
   fontSize: FontSize;
   contrastMode: ContrastMode;
+  themeMode: ThemeMode;
+  language: Language;
   dyslexiaFont: boolean;
   reducedMotion: boolean;
 }
@@ -22,6 +26,8 @@ const defaultSettings: AccessibilitySettings = {
   colorBlindMode: 'none',
   fontSize: 'medium',
   contrastMode: 'normal',
+  themeMode: 'system',
+  language: 'en',
   dyslexiaFont: false,
   reducedMotion: false
 };
@@ -61,6 +67,28 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     // Apply contrast mode
     root.setAttribute('data-contrast-mode', settings.contrastMode);
 
+    // Apply theme mode
+    if (settings.themeMode === 'system') {
+      // Remove manual dark/light class and use system preference
+      root.classList.remove('dark', 'light');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) {
+        root.classList.add('dark');
+      } else {
+        root.classList.add('light');
+      }
+    } else if (settings.themeMode === 'dark') {
+      root.classList.remove('light');
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+      root.classList.add('light');
+    }
+
+    // Apply language and text direction
+    root.setAttribute('lang', settings.language);
+    root.setAttribute('dir', settings.language === 'he' ? 'rtl' : 'ltr');
+
     // Apply dyslexia font
     if (settings.dyslexiaFont) {
       root.classList.add('dyslexia-font');
@@ -78,6 +106,24 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     // Save to localStorage
     localStorage.setItem('accessibilitySettings', JSON.stringify(settings));
   }, [settings]);
+
+  // Listen for system theme changes when in system mode
+  useEffect(() => {
+    if (settings.themeMode !== 'system') return;
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      const root = document.documentElement;
+      if (e.matches) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [settings.themeMode]);
 
   const updateSettings = (updates: Partial<AccessibilitySettings>) => {
     setSettings(prev => ({ ...prev, ...updates }));

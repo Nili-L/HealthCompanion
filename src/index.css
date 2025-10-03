@@ -2158,7 +2158,8 @@
   }
 }
 
-:root {
+:root,
+.light {
   --font-size: 16px;
   --background: #fff;
   --foreground: oklch(.145 0 0);
@@ -2631,4 +2632,18 @@ html {
   --color-purple-600: oklch(.558 0 0);
   --color-purple-800: oklch(.438 0 0);
   --color-purple-900: oklch(.381 0 0);
+}
+
+/* RTL Support for Hebrew */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
 }

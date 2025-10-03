@@ -41,3 +41,20 @@ Thumbs.db
 # Temp
 *.tmp
 *.temp
+dist-electron/
+android/
+
+# Capacitor
+.capacitor/
+ios/
+
+# Sensitive data - SECURITY
+*.pem
+*.key
+*.cert
+
+# HIPAA Compliance - Do not commit PHI
+**/patient-data/
+**/test-data/
+**/backups/
+**/exports/

@@ -303,8 +303,16 @@ npm run dev
 The app will open at `http://localhost:3000`
 
 ### Demo Accounts
+
+Demo accounts start with empty profiles for users to fill in their own information.
+
 - **Patient**: `patient@demo.com` / `demo123`
+  - Empty profile ready to be completed
+  - No pre-filled data - start fresh
+
 - **Provider**: `provider@demo.com` / `demo123`
+
+**Note**: Demo accounts provide a clean slate for testing the application with your own data.
 
 ---
 

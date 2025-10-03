@@ -1,0 +1,70 @@
+name: Code Quality
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for better analysis
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+
+      - name: Run ESLint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Check for console.log statements
+        run: |
+          if git grep -n "console\.log" src/; then
+            echo "⚠️ Found console.log statements in src/"
+            echo "Please use console.error or console.warn for important messages"
+            exit 1
+          fi
+        continue-on-error: true
+
+      - name: Check for TODO comments
+        run: |
+          if git grep -n "TODO\|FIXME\|HACK" src/; then
+            echo "ℹ️ Found TODO/FIXME/HACK comments"
+            echo "Consider creating issues for these items"
+          fi
+        continue-on-error: true
+
+      - name: Check bundle size
+        run: |
+          npm run build
+          du -sh dist/ | awk '{print "Bundle size: " $1}'
+
+      - name: Comment PR with results
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const fs = require('fs');
+            const bundleSize = require('child_process')
+              .execSync('du -sh dist/')
+              .toString()
+              .split('\t')[0];
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Code Quality Report\n\n✅ Build successful\n📦 Bundle size: ${bundleSize}\n\n*Automated check by GitHub Actions*`
+            });

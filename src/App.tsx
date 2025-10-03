@@ -4,6 +4,8 @@ import { AuthForm } from "./components/AuthForm";
 import { createClient } from "./utils/supabase/client";
 import { Toaster } from "./components/ui/sonner";
 import { AccessibilityProvider } from "./contexts/AccessibilityContext";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { audit } from "./lib/auditLog";
 
 export default function App() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -38,6 +40,12 @@ export default function App() {
 
   const handleLogout = async () => {
     const supabase = createClient();
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session?.user) {
+      await audit.logout(session.user.id);
+    }
+
     await supabase.auth.signOut();
     setAccessToken(null);
     setRole(null);
@@ -58,13 +66,15 @@ export default function App() {
   }
 
   return (
-    <AccessibilityProvider>
-      <Toaster />
-      <HealthcareDashboard
-        accessToken={accessToken}
-        role={role}
-        onLogout={handleLogout}
-      />
-    </AccessibilityProvider>
+    <ErrorBoundary>
+      <AccessibilityProvider>
+        <Toaster />
+        <HealthcareDashboard
+          accessToken={accessToken}
+          role={role}
+          onLogout={handleLogout}
+        />
+      </AccessibilityProvider>
+    </ErrorBoundary>
   );
 }

@@ -104,41 +104,61 @@ interface SafetyPlanData {
 const defaultCrisisResources: CrisisResource[] = [
   {
     id: '1',
-    name: '988 Suicide & Crisis Lifeline',
+    name: 'ERAN - Emotional First Aid (Israel)',
     type: 'hotline',
-    contact: '988',
-    description: '24/7 free and confidential support',
+    contact: '1201 or *2201',
+    description: '24/7 emotional support and crisis intervention in Hebrew, Arabic, Russian, Amharic',
     availability: '24/7',
     isLGBTQFriendly: true,
     isEmergency: true
   },
   {
     id: '2',
-    name: 'Trans Lifeline',
-    type: 'hotline',
-    contact: '877-565-8860',
-    description: 'Trans peer support line staffed by trans people',
-    availability: '24/7',
+    name: 'Sahar - Emotional Support Chat (Israel)',
+    type: 'online-chat',
+    contact: 'www.sahar.org.il',
+    description: 'Anonymous emotional support chat for youth and adults',
+    availability: 'Sun-Thu 19:00-23:00',
     isLGBTQFriendly: true,
     isEmergency: true
   },
   {
     id: '3',
-    name: 'Trevor Project (LGBTQ Youth)',
+    name: 'Israeli LGBT Association Hotline',
     type: 'hotline',
-    contact: '1-866-488-7386',
-    description: 'Crisis intervention for LGBTQ youth under 25',
-    availability: '24/7',
+    contact: '*5433 (Israel)',
+    description: 'Support for LGBTQ+ individuals and families',
+    availability: 'Sun-Thu 16:00-22:00',
     isLGBTQFriendly: true,
     isEmergency: true
   },
   {
     id: '4',
-    name: 'Crisis Text Line',
-    type: 'text-line',
-    contact: 'Text HOME to 741741',
-    description: 'Text-based crisis support',
+    name: 'Jerusalem Open House Crisis Line',
+    type: 'hotline',
+    contact: '02-625-0502',
+    description: 'Crisis intervention for LGBTQ+ community',
     availability: '24/7',
+    isLGBTQFriendly: true,
+    isEmergency: true
+  },
+  {
+    id: '5',
+    name: 'Natal - Trauma & Resilience Center',
+    type: 'hotline',
+    contact: '1-800-363-363',
+    description: 'Support for trauma, PTSD, and stress-related issues',
+    availability: 'Sun-Thu 18:00-22:00',
+    isLGBTQFriendly: true,
+    isEmergency: false
+  },
+  {
+    id: '6',
+    name: 'International Crisis Hotlines',
+    type: 'hotline',
+    contact: 'findahelpline.com',
+    description: 'Directory of crisis helplines worldwide by country',
+    availability: 'Varies by region',
     isLGBTQFriendly: true,
     isEmergency: true
   }
@@ -347,10 +367,11 @@ export function SafetyPlanning({ accessToken }: SafetyPlanningProps) {
             <div className="text-sm text-red-900">
               <p className="font-semibold mb-2">If you're in immediate danger:</p>
               <div className="space-y-1">
-                <p>🆘 Call 911 or go to your nearest emergency room</p>
-                <p>☎️ Call 988 (Suicide & Crisis Lifeline) - Free, confidential, 24/7</p>
-                <p>📱 Text HOME to 741741 (Crisis Text Line)</p>
-                <p>🏳️‍⚧️ Trans Lifeline: 877-565-8860</p>
+                <p>🆘 <strong>Israel:</strong> Call 100 (Police), 101 (Ambulance), or go to your nearest emergency room</p>
+                <p>☎️ <strong>ERAN Crisis Line:</strong> 1201 or *2201 - Free, confidential, 24/7 (Hebrew, Arabic, Russian, Amharic)</p>
+                <p>💬 <strong>Sahar Chat:</strong> www.sahar.org.il - Anonymous emotional support</p>
+                <p>🏳️‍🌈 <strong>Israeli LGBT Association:</strong> *5433</p>
+                <p>🌍 <strong>International:</strong> Visit findahelpline.com for crisis numbers in your country</p>
               </div>
             </div>
           </div>

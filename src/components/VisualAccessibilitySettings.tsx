@@ -17,9 +17,14 @@ import {
   Palette,
   RotateCcw,
   Check,
-  Zap
+  Zap,
+  Sun,
+  Moon,
+  Monitor,
+  Languages
 } from "lucide-react";
-import { useAccessibility, ColorBlindMode, FontSize, ContrastMode } from "../contexts/AccessibilityContext";
+import { useAccessibility, ColorBlindMode, FontSize, ContrastMode, ThemeMode, Language } from "../contexts/AccessibilityContext";
+import { useTranslation } from "../i18n/translations";
 
 interface VisualAccessibilitySettingsProps {
   onClose?: () => void;
@@ -27,6 +32,7 @@ interface VisualAccessibilitySettingsProps {
 
 export function VisualAccessibilitySettings({ onClose }: VisualAccessibilitySettingsProps) {
   const { settings, updateSettings, resetSettings } = useAccessibility();
+  const t = useTranslation(settings.language);
 
   const colorBlindModes: { value: ColorBlindMode; label: string; description: string }[] = [
     { value: 'none', label: 'None', description: 'Standard colors' },
@@ -43,6 +49,12 @@ export function VisualAccessibilitySettings({ onClose }: VisualAccessibilitySett
     { value: 'extra-large', label: 'Extra Large (22px)' }
   ];
 
+  const themeModes: { value: ThemeMode; label: string; icon: React.ReactNode; description: string }[] = [
+    { value: 'light', label: 'Light', icon: <Sun className="h-4 w-4" />, description: 'Always use light theme' },
+    { value: 'dark', label: 'Dark', icon: <Moon className="h-4 w-4" />, description: 'Always use dark theme' },
+    { value: 'system', label: 'System', icon: <Monitor className="h-4 w-4" />, description: 'Follow system preference' }
+  ];
+
   return (
     <div className="space-y-6">
       <Card className="border-l-4 border-l-indigo-500">
@@ -52,13 +64,97 @@ export function VisualAccessibilitySettings({ onClose }: VisualAccessibilitySett
               <Eye className="h-6 w-6 text-indigo-600" />
             </div>
             <div>
-              <CardTitle>Visual Accessibility Settings</CardTitle>
+              <CardTitle>{t('accessibilitySettings')}</CardTitle>
               <CardDescription>
-                Customize the display to meet your visual needs
+                {t('customizeDisplay')}
               </CardDescription>
             </div>
           </div>
         </CardHeader>
+      </Card>
+
+      {/* Theme Mode */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Monitor className="h-5 w-5 text-indigo-600" />
+            <CardTitle className="text-lg">Theme Mode</CardTitle>
+          </div>
+          <CardDescription>Choose between light, dark, or system theme</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-3">
+            {themeModes.map(mode => (
+              <div
+                key={mode.value}
+                className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
+                  settings.themeMode === mode.value
+                    ? 'border-indigo-500 bg-indigo-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+                onClick={() => updateSettings({ themeMode: mode.value })}
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <div className={`${settings.themeMode === mode.value ? 'text-indigo-600' : 'text-gray-600'}`}>
+                    {mode.icon}
+                  </div>
+                  <div className="font-semibold">{mode.label}</div>
+                  <div className="text-xs text-gray-600">{mode.description}</div>
+                  {settings.themeMode === mode.value && (
+                    <Check className="h-4 w-4 text-indigo-600 mt-1" />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Language */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Languages className="h-5 w-5 text-green-600" />
+            <CardTitle className="text-lg">{t('language')}</CardTitle>
+          </div>
+          <CardDescription>{t('languageDescription')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-3">
+            <div
+              className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
+                settings.language === 'en'
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+              onClick={() => updateSettings({ language: 'en' })}
+            >
+              <div className="flex flex-col items-center gap-2">
+                <div className="font-semibold">{t('english')}</div>
+                <div className="text-xs text-gray-600">English</div>
+                {settings.language === 'en' && (
+                  <Check className="h-4 w-4 text-green-600 mt-1" />
+                )}
+              </div>
+            </div>
+            <div
+              className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
+                settings.language === 'he'
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+              onClick={() => updateSettings({ language: 'he' })}
+            >
+              <div className="flex flex-col items-center gap-2">
+                <div className="font-semibold">{t('hebrew')}</div>
+                <div className="text-xs text-gray-600">עברית</div>
+                {settings.language === 'he' && (
+                  <Check className="h-4 w-4 text-green-600 mt-1" />
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
       </Card>
 
       {/* Color-Blind Mode */}

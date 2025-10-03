@@ -184,13 +184,19 @@ export function HelpManual({ accessToken }: { accessToken: string }) {
         </CardHeader>
         <CardContent className="space-y-2">
           <p className="text-sm">
-            <strong>Email:</strong> support@healthportal.com
+            <strong>Email:</strong> support@healthportal.co.il
           </p>
           <p className="text-sm">
-            <strong>Phone:</strong> 1-800-HEALTH-1
+            <strong>Phone (Israel):</strong> *6050 or 03-123-4567
           </p>
           <p className="text-sm">
-            <strong>Hours:</strong> Monday - Friday, 8am - 8pm EST
+            <strong>Phone (International):</strong> +972-3-123-4567
+          </p>
+          <p className="text-sm">
+            <strong>Hours:</strong> Sunday - Thursday, 8:00 - 20:00 (Israel Time)
+          </p>
+          <p className="text-xs text-muted-foreground mt-2">
+            Support available in Hebrew, English, Arabic, and Russian
           </p>
         </CardContent>
       </Card>

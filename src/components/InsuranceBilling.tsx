@@ -544,7 +544,7 @@ export function InsuranceBilling({ accessToken }: { accessToken: string }) {
                           customerServicePhone: e.target.value,
                         })
                       }
-                      placeholder="1-800-123-4567"
+                      placeholder="*6050 or 03-123-4567"
                     />
                   </div>
                   <div>
@@ -555,7 +555,7 @@ export function InsuranceBilling({ accessToken }: { accessToken: string }) {
                       onChange={(e) =>
                         setInsuranceData({ ...insuranceData, claimsPhone: e.target.value })
                       }
-                      placeholder="1-800-987-6543"
+                      placeholder="*6051 or 03-987-6543"
                     />
                   </div>
                 </div>

@@ -1,0 +1,13 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run linter on staged files
+npx lint-staged
+
+# Run type check
+npm run type-check || {
+  echo "❌ TypeScript errors found. Please fix them before committing."
+  exit 1
+}
+
+echo "✅ Pre-commit checks passed!"
