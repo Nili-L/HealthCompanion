@@ -2326,4 +2326,152 @@ app.post("/make-server-50d6a062/community/posts/:id/like", async (c) => {
   }
 });
 
+// ===== GENDER IDENTITY ENDPOINT =====
+
+app.get("/make-server-50d6a062/gender-identity", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const genderIdentity = await kv.get(`gender-identity:${user.id}`);
+    return c.json({ data: genderIdentity || null });
+  } catch (error) {
+    console.error('Get gender identity error:', error);
+    return c.json({ error: 'Failed to fetch gender identity' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/gender-identity", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const genderData = await c.req.json();
+    await kv.set(`gender-identity:${user.id}`, genderData);
+    return c.json({ success: true, data: genderData });
+  } catch (error) {
+    console.error('Update gender identity error:', error);
+    return c.json({ error: 'Failed to update gender identity' }, 500);
+  }
+});
+
+// ===== CONSENT & BOUNDARIES ENDPOINT =====
+
+app.get("/make-server-50d6a062/consent-boundaries", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const consentBoundaries = await kv.get(`consent-boundaries:${user.id}`);
+    return c.json({ data: consentBoundaries || null });
+  } catch (error) {
+    console.error('Get consent boundaries error:', error);
+    return c.json({ error: 'Failed to fetch consent boundaries' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/consent-boundaries", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const boundariesData = await c.req.json();
+    await kv.set(`consent-boundaries:${user.id}`, boundariesData);
+    return c.json({ success: true, data: boundariesData });
+  } catch (error) {
+    console.error('Update consent boundaries error:', error);
+    return c.json({ error: 'Failed to update consent boundaries' }, 500);
+  }
+});
+
+// ===== TRANSITION CARE TRACKING ENDPOINT =====
+
+app.get("/make-server-50d6a062/transition-care", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const transitionCare = await kv.get(`transition-care:${user.id}`);
+    return c.json({ data: transitionCare || null });
+  } catch (error) {
+    console.error('Get transition care error:', error);
+    return c.json({ error: 'Failed to fetch transition care data' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/transition-care", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const transitionData = await c.req.json();
+    await kv.set(`transition-care:${user.id}`, transitionData);
+    return c.json({ success: true, data: transitionData });
+  } catch (error) {
+    console.error('Update transition care error:', error);
+    return c.json({ error: 'Failed to update transition care data' }, 500);
+  }
+});
+
+// ===== SAFETY PLANNING ENDPOINT =====
+
+app.get("/make-server-50d6a062/safety-planning", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const safetyPlan = await kv.get(`safety-plan:${user.id}`);
+    return c.json({ data: safetyPlan || null });
+  } catch (error) {
+    console.error('Get safety planning error:', error);
+    return c.json({ error: 'Failed to fetch safety plan' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/safety-planning", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const safetyData = await c.req.json();
+    await kv.set(`safety-plan:${user.id}`, safetyData);
+    return c.json({ success: true, data: safetyData });
+  } catch (error) {
+    console.error('Update safety planning error:', error);
+    return c.json({ error: 'Failed to update safety plan' }, 500);
+  }
+});
+
 Deno.serve(app.fetch);

@@ -30,7 +30,8 @@ import {
   Trash2,
   Brain,
   Image,
-  CheckSquare
+  CheckSquare,
+  Shield
 } from "lucide-react";
 import { projectId, publicAnonKey } from "../utils/supabase/info";
 import { PatientProfile } from "./PatientProfile";
@@ -60,6 +61,10 @@ import { RequestTemplates } from "./RequestTemplates";
 import { MindMaps } from "./MindMaps";
 import { HelpManual } from "./HelpManual";
 import { MedicalImaging } from "./MedicalImaging";
+import { GenderIdentity } from "./GenderIdentity";
+import { ConsentBoundaries } from "./ConsentBoundaries";
+import { TransitionCareTracking } from "./TransitionCareTracking";
+import { SafetyPlanning } from "./SafetyPlanning";
 
 interface ModuleDetailViewProps {
   moduleTitle: string;
@@ -175,6 +180,22 @@ function ModuleDetailView({ moduleTitle, role, accessToken }: ModuleDetailViewPr
 
   if (moduleTitle === "Help & FAQs") {
     return <HelpManual accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Gender Identity & Pronouns") {
+    return <GenderIdentity accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Consent & Boundaries") {
+    return <ConsentBoundaries accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Transition Care Tracking") {
+    return <TransitionCareTracking accessToken={accessToken} />;
+  }
+
+  if (moduleTitle === "Safety Planning") {
+    return <SafetyPlanning accessToken={accessToken} />;
   }
 
   // Default view for modules without custom components yet
@@ -324,6 +345,34 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       description: "Personal information, demographics, contact details",
       icon: <User className="h-4 w-4" />,
       status: "active" as const
+    },
+    {
+      title: "Gender Identity & Pronouns",
+      description: "Chosen name, pronouns, gender identity, and visibility preferences",
+      icon: <Heart className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Consent & Boundaries",
+      description: "Trauma-informed care preferences and physical exam boundaries",
+      icon: <Shield className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Transition Care Tracking",
+      description: "HRT tracking, procedures, milestones, and letters of support",
+      icon: <Heart className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Safety Planning",
+      description: "Crisis resources, safe people, coping strategies, and emergency plans",
+      icon: <Shield className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
     },
     {
       title: "Health History",
