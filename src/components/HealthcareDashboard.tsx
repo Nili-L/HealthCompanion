@@ -317,7 +317,7 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
   const handleLogout = () => {
     onLogout();
   };
-  // Patient-focused modules
+  // Patient-focused modules (flat list)
   const patientModules = [
     {
       title: "My Profile",
@@ -330,6 +330,19 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       description: "Mental, physical, familial, and genetic health history",
       icon: <ClipboardList className="h-4 w-4" />,
       status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Period Tracking",
+      description: "Menstrual cycle tracking and symptom monitoring",
+      icon: <Calendar className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
+      title: "Patient Journal",
+      description: "Personal knowledge base and reflections",
+      icon: <FileText className="h-4 w-4" />,
       isNew: true
     },
     {
@@ -347,6 +360,18 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       count: 8
     },
     {
+      title: "OCR Scanning",
+      description: "Extract text from medical documents",
+      icon: <Scan className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Media Library",
+      description: "Uploaded art, music, photos, and other media",
+      icon: <Image className="h-4 w-4" />,
+      isNew: true
+    },
+    {
       title: "Medication Tracking",
       description: "Current medications, dosages, schedules",
       icon: <Pill className="h-4 w-4" />,
@@ -359,13 +384,6 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       icon: <Activity className="h-4 w-4" />,
       count: 15,
       status: "active" as const,
-      isNew: true
-    },
-    {
-      title: "Appointment Scheduling",
-      description: "Book, reschedule, and manage appointments",
-      icon: <Calendar className="h-4 w-4" />,
-      count: 3,
       isNew: true
     },
     {
@@ -384,38 +402,9 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       isNew: true
     },
     {
-      title: "Document Upload",
-      description: "Upload insurance cards, referrals, forms",
-      icon: <Upload className="h-4 w-4" />
-    },
-    {
-      title: "Messages",
-      description: "Secure messaging with healthcare providers",
-      icon: <MessageSquare className="h-4 w-4" />,
-      count: 7,
-      status: "active" as const,
-      isNew: true
-    },
-    {
-      title: "Care Team",
-      description: "Primary care, specialists, emergency contacts",
-      icon: <UserPlus className="h-4 w-4" />,
-      count: 4,
-      status: "active" as const,
-      isNew: true
-    },
-    {
-      title: "Insurance & Billing",
-      description: "Insurance info, claims, payment history",
-      icon: <FileCheck className="h-4 w-4" />,
-      status: "active" as const,
-      isNew: true
-    },
-    {
-      title: "Health Goals",
-      description: "Set and track wellness objectives",
-      icon: <Heart className="h-4 w-4" />,
-      status: "active" as const,
+      title: "Appointment Scheduling",
+      description: "Book, reschedule, and manage appointments",
+      icon: <Calendar className="h-4 w-4" />,
       count: 3,
       isNew: true
     },
@@ -427,22 +416,11 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       isNew: true
     },
     {
-      title: "Period Tracking",
-      description: "Menstrual cycle tracking and symptom monitoring",
-      icon: <Calendar className="h-4 w-4" />,
+      title: "Messages",
+      description: "Secure messaging with healthcare providers",
+      icon: <MessageSquare className="h-4 w-4" />,
+      count: 7,
       status: "active" as const,
-      isNew: true
-    },
-    {
-      title: "Media Library",
-      description: "Uploaded art, music, photos, and other media",
-      icon: <Image className="h-4 w-4" />,
-      isNew: true
-    },
-    {
-      title: "OCR Scanning",
-      description: "Extract text from medical documents",
-      icon: <Scan className="h-4 w-4" />,
       isNew: true
     },
     {
@@ -452,21 +430,11 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       isNew: true
     },
     {
-      title: "Patient Journal",
-      description: "Personal knowledge base and reflections",
-      icon: <FileText className="h-4 w-4" />,
-      isNew: true
-    },
-    {
-      title: "To-Do Lists",
-      description: "Generated tasks from documents and appointments",
-      icon: <CheckSquare className="h-4 w-4" />,
-      isNew: true
-    },
-    {
-      title: "Health Insights",
-      description: "AI-generated reports with side-by-side comparisons",
-      icon: <TrendingUp className="h-4 w-4" />,
+      title: "Care Team",
+      description: "Primary care, specialists, emergency contacts",
+      icon: <UserPlus className="h-4 w-4" />,
+      count: 4,
+      status: "active" as const,
       isNew: true
     },
     {
@@ -476,15 +444,42 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       isNew: true
     },
     {
+      title: "Insurance & Billing",
+      description: "Insurance info, claims, payment history",
+      icon: <FileCheck className="h-4 w-4" />,
+      status: "active" as const,
+      isNew: true
+    },
+    {
       title: "Financial Management",
       description: "Receipts, refunds, payments, authorizations, permits",
       icon: <FileCheck className="h-4 w-4" />,
       isNew: true
     },
     {
-      title: "Support Tickets",
-      description: "Submit and track support requests",
-      icon: <HelpCircle className="h-4 w-4" />,
+      title: "Health Goals",
+      description: "Set and track wellness objectives",
+      icon: <Heart className="h-4 w-4" />,
+      status: "active" as const,
+      count: 3,
+      isNew: true
+    },
+    {
+      title: "To-Do Lists",
+      description: "Generated tasks from documents and appointments",
+      icon: <CheckSquare className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Self-Care Tracker",
+      description: "Exercise, nutrition, sleep, mental health",
+      icon: <Stethoscope className="h-4 w-4" />,
+      count: 30
+    },
+    {
+      title: "Health Insights",
+      description: "AI-generated reports with side-by-side comparisons",
+      icon: <TrendingUp className="h-4 w-4" />,
       isNew: true
     },
     {
@@ -494,33 +489,27 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
       isNew: true
     },
     {
-      title: "Request Templates",
-      description: "Pre-filled forms for common requests",
-      icon: <FileText className="h-4 w-4" />,
-      isNew: true
-    },
-    {
       title: "Mind Maps",
       description: "Visualize connections between health factors",
       icon: <Brain className="h-4 w-4" />,
       isNew: true
     },
     {
+      title: "Request Templates",
+      description: "Pre-filled forms for common requests",
+      icon: <FileText className="h-4 w-4" />,
+      isNew: true
+    },
+    {
+      title: "Support Tickets",
+      description: "Submit and track support requests",
+      icon: <HelpCircle className="h-4 w-4" />,
+      isNew: true
+    },
+    {
       title: "Help & FAQs",
       description: "Documentation, tutorials, and support",
       icon: <HelpCircle className="h-4 w-4" />
-    },
-    {
-      title: "Self-Care Tracker",
-      description: "Exercise, nutrition, sleep, mental health",
-      icon: <Stethoscope className="h-4 w-4" />,
-      count: 30
-    },
-    {
-      title: "My Providers",
-      description: "Healthcare provider information and networks",
-      icon: <ClipboardList className="h-4 w-4" />,
-      count: 4
     },
     {
       title: "Health Resources",
