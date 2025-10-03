@@ -72,6 +72,8 @@ import { ReproductiveHealth } from "./ReproductiveHealth";
 import { SexualHealth } from "./SexualHealth";
 import { MedicalAdvocacy } from "./MedicalAdvocacy";
 import { AccessibilityAccommodations } from "./AccessibilityAccommodations";
+import { VisualAccessibilitySettings } from "./VisualAccessibilitySettings";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 
 interface ModuleDetailViewProps {
   moduleTitle: string;
@@ -335,6 +337,7 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
   const [userData, setUserData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeModule, setActiveModule] = useState<string | null>(null);
+  const [showAccessibilitySettings, setShowAccessibilitySettings] = useState(false);
 
   useEffect(() => {
     fetchUserData();
@@ -757,8 +760,8 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
             <Button variant="ghost" size="sm">
               <HelpCircle className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="sm">
-              <Settings className="h-4 w-4" />
+            <Button variant="ghost" size="sm" onClick={() => setShowAccessibilitySettings(true)}>
+              <Accessibility className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="sm" onClick={handleLogout}>
               <LogOut className="h-4 w-4 mr-2" />
@@ -956,6 +959,16 @@ export function HealthcareDashboard({ accessToken, role, onLogout }: HealthcareD
           </div>
         )}
       </main>
+
+      {/* Accessibility Settings Dialog */}
+      <Dialog open={showAccessibilitySettings} onOpenChange={setShowAccessibilitySettings}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Accessibility Settings</DialogTitle>
+          </DialogHeader>
+          <VisualAccessibilitySettings onClose={() => setShowAccessibilitySettings(false)} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

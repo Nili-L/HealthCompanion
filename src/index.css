@@ -1,4 +1,24 @@
 /*! tailwindcss v4.1.3 | MIT License | https://tailwindcss.com */
+
+/* OpenDyslexic Font - From CDN */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Bold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
@@ -2508,4 +2528,107 @@ html {
     opacity: var(--tw-exit-opacity, 1);
     transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));
   }
+}
+
+/* Accessibility Features */
+
+/* Dyslexia-Friendly Font - OpenDyslexic */
+.dyslexia-font {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', 'Trebuchet MS', sans-serif !important;
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.1em !important;
+  line-height: 1.6 !important;
+}
+
+.dyslexia-font * {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', 'Trebuchet MS', sans-serif !important;
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.1em !important;
+}
+
+/* Reduced Motion */
+.reduced-motion,
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* High Contrast Mode */
+[data-contrast-mode="high"] {
+  --background: #000;
+  --foreground: #fff;
+  --card: #000;
+  --card-foreground: #fff;
+  --popover: #000;
+  --popover-foreground: #fff;
+  --primary: #fff;
+  --primary-foreground: #000;
+  --secondary: #fff;
+  --secondary-foreground: #000;
+  --muted: #333;
+  --muted-foreground: #fff;
+  --accent: #fff;
+  --accent-foreground: #000;
+  --border: #fff;
+  --input: #fff;
+  --ring: #fff;
+}
+
+[data-contrast-mode="high"] * {
+  border-color: #fff !important;
+}
+
+/* Color-Blind Modes */
+
+/* Deuteranopia (Red-Green Color Blindness - Most Common) */
+[data-colorblind-mode="deuteranopia"] {
+  --color-red-600: oklch(.577 .15 60);
+  --color-orange-600: oklch(.646 .18 60);
+  --color-green-600: oklch(.627 .15 100);
+  --color-blue-600: oklch(.546 .245 262.881);
+  --color-purple-600: oklch(.558 .25 280);
+}
+
+/* Protanopia (Red-Green Color Blindness) */
+[data-colorblind-mode="protanopia"] {
+  --color-red-600: oklch(.577 .15 70);
+  --color-orange-600: oklch(.646 .18 70);
+  --color-green-600: oklch(.627 .15 110);
+  --color-blue-600: oklch(.546 .245 262.881);
+  --color-purple-600: oklch(.558 .25 280);
+}
+
+/* Tritanopia (Blue-Yellow Color Blindness) */
+[data-colorblind-mode="tritanopia"] {
+  --color-red-600: oklch(.577 .245 350);
+  --color-orange-600: oklch(.646 .222 350);
+  --color-green-600: oklch(.627 .194 170);
+  --color-blue-600: oklch(.546 .15 180);
+  --color-purple-600: oklch(.558 .15 340);
+}
+
+/* Achromatopsia (Complete Color Blindness) */
+/* Apply grayscale using color variables instead of filter to avoid dialog issues */
+[data-colorblind-mode="achromatopsia"] {
+  --color-red-600: oklch(.577 0 0);
+  --color-orange-100: oklch(.954 0 0);
+  --color-orange-600: oklch(.646 0 0);
+  --color-green-100: oklch(.962 0 0);
+  --color-green-600: oklch(.627 0 0);
+  --color-blue-50: oklch(.97 0 0);
+  --color-blue-100: oklch(.932 0 0);
+  --color-blue-200: oklch(.882 0 0);
+  --color-blue-500: oklch(.623 0 0);
+  --color-blue-600: oklch(.546 0 0);
+  --color-blue-900: oklch(.379 0 0);
+  --color-purple-50: oklch(.977 0 0);
+  --color-purple-100: oklch(.946 0 0);
+  --color-purple-200: oklch(.902 0 0);
+  --color-purple-600: oklch(.558 0 0);
+  --color-purple-800: oklch(.438 0 0);
+  --color-purple-900: oklch(.381 0 0);
 }

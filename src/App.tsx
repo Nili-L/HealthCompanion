@@ -3,6 +3,7 @@ import { HealthcareDashboard } from "./components/HealthcareDashboard";
 import { AuthForm } from "./components/AuthForm";
 import { createClient } from "./utils/supabase/client";
 import { Toaster } from "./components/ui/sonner";
+import { AccessibilityProvider } from "./contexts/AccessibilityContext";
 
 export default function App() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -57,13 +58,13 @@ export default function App() {
   }
 
   return (
-    <>
+    <AccessibilityProvider>
       <Toaster />
-      <HealthcareDashboard 
-        accessToken={accessToken} 
+      <HealthcareDashboard
+        accessToken={accessToken}
         role={role}
         onLogout={handleLogout}
       />
-    </>
+    </AccessibilityProvider>
   );
 }

@@ -2659,4 +2659,41 @@ app.put("/make-server-50d6a062/accessibility", async (c) => {
   }
 });
 
+// ===== VISUAL ACCESSIBILITY SETTINGS ENDPOINT =====
+
+app.get("/make-server-50d6a062/visual-accessibility", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const settings = await kv.get(`visual-accessibility:${user.id}`);
+    return c.json({ data: settings || null });
+  } catch (error) {
+    console.error('Get visual accessibility error:', error);
+    return c.json({ error: 'Failed to fetch visual accessibility settings' }, 500);
+  }
+});
+
+app.put("/make-server-50d6a062/visual-accessibility", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    if (error || !user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const settingsData = await c.req.json();
+    await kv.set(`visual-accessibility:${user.id}`, settingsData);
+    return c.json({ success: true, data: settingsData });
+  } catch (error) {
+    console.error('Update visual accessibility error:', error);
+    return c.json({ error: 'Failed to update visual accessibility settings' }, 500);
+  }
+});
+
 Deno.serve(app.fetch);
